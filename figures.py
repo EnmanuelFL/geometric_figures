@@ -32,16 +32,16 @@ class Circle(Figures2D):
         self.name = 'Circle'
         self.radio = None
     def get_name(self):
-        return self.name
+        print(self.name)
     def enter_data(self):
-        self.radio = float(input(f'enter the data,{self.radio}'))
-        print(self.radio)
+        self.radio = float(input(f'enter the data:'))
     def calculate_area(self):
         self.area = math.pi * self.radio ** 2
     def calculate_perimeter(self):
         self.perimeter = 2 * self.radio * math.pi
     def show_result(self):
-        return f'The area of ​​the circle is:{self.area} \n The perimeter of the circle is:{self.perimeter}'
+        self.get_name()
+        print(f'The area of ​​the circle is:{self.area:.2f}\nThe perimeter of the circle is:{self.perimeter:.2f}')
         
 class Rectangle(Figures2D):
     def get_name(self):
