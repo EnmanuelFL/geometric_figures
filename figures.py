@@ -59,16 +59,32 @@ class Rectangle(Figures2D):
     def show_result(self):
         print(f'The area of the rectangles is: {self.area:.2f}\nThe perimeter of the rectangles is:{self.perimeter:.2f}')
 class Trapeze(Figures2D):
+    def __init__(self):
+        self.name = 'Trapeze'
+        self.base = None
+        self.base_minior = None
+        self.height = None
+        self.lado1 = None
+        self.lado2 = None
     def get_name(self):
-        pass
+        print(self.name)
+
     def enter_data(self):
-        pass
-    def show_result(self):
-        pass
+        self.base = float(input(f'enter the data base: '))
+        self.base_minior = float(input(f'enter the data base minior: '))
+        self.height = float(input(f'enter the data height: '))
+        self.lado1 = float(input(f'enter the data lado1: '))
+        self.lado2 = float(input(f'enter the data lado2: '))
+
     def calculate_area(self):
-        pass
+        self.area = (self.base + self.base_minior) * self.height / 2
+
     def calculate_perimeter(self):
-        pass
+        self.perimeter = self.base + self.base_minior + self.lado1 + self.lado2
+
+    def show_result(self):
+        print(f'The area of the trapeze is: {self.area:.2f}\nThe perimeter of the trapeze is:{self.perimeter:.2f}')
+
 
 class Cube(Figures3D):
     def get_name(self):
