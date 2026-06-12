@@ -40,21 +40,24 @@ class Circle(Figures2D):
     def calculate_perimeter(self):
         self.perimeter = 2 * self.radio * math.pi
     def show_result(self):
-        self.get_name()
         print(f'The area of ​​the circle is:{self.area:.2f}\nThe perimeter of the circle is:{self.perimeter:.2f}')
         
 class Rectangle(Figures2D):
+    def __init__(self):
+        self.name = 'Rectangle'
+        self.base = None
+        self.height = None
     def get_name(self):
-        pass
+        print(self.name)
     def enter_data(self):
-        pass
-    def show_result(self):
-        pass
+        self.base = float(input(f'enter the data base:'))
+        self.height = float(input(f'enter the data height:'))
     def calculate_area(self):
-        pass
+        self.area = self.base * self.height
     def calculate_perimeter(self):
-        pass
-
+        self.perimeter = 2 * (self.base + self.height)
+    def show_result(self):
+        print(f'The area of the rectangles is: {self.area:.2f}\nThe perimeter of the rectangles is:{self.perimeter:.2f}')
 class Trapeze(Figures2D):
     def get_name(self):
         pass
