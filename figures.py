@@ -107,7 +107,6 @@ class Cube(Figures3D):
 
     def enter_data(self):
         self.sides = float(input(f'enter the data sides: '))
-        self.diagonal = float(input(f'enter the data diagonal: '))
 
     def calculate_volume(self):
         self.volume = self.sides ** 3
@@ -120,17 +119,26 @@ class Cube(Figures3D):
         print(f'The volume of the Cube is: {self.volume:.2f}\nThe diagonal of the Cube is: {self.diagonal:.2f}\nThe surface area is: {self.surface_area:.2f}')
 
 class Cylinder(Figures3D):
-    def get_name(self):
-        pass
-    def enter_data(self):
-        pass
-    def show_result(self):
-        pass
-    def calculate_volume(self):
-        pass
-    def calculate_surface_area(self):
-        pass
+    def __init__(self):
+        self.name = 'Cylinder'
+        self.height = None
+        self.radio = None
 
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.height = float(input('Enter de data heigth: '))
+        self.radio = float(input('Enter de data radio: '))
+
+    def calculate_volume(self):
+        self.volume = math.pi  * self.radio ** 2 * self.height
+
+    def calculate_surface_area(self):
+        self.superface_area = 2 * math.pi * self.radio ** 2 + 2 * math.pi * self.radio * self.height
+
+    def show_result(self):
+        print(f'The volume of Cylinder is: {self.volume:.2f}\nThe superface area of Cylinder is: {self.superface_area:.2f}')
 class Sphere(Figures3D):
     def get_name(self):
         pass

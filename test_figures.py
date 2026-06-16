@@ -1,7 +1,8 @@
 # from figures import Circle
 # from figures import Rectangle
 # from figures import Trapeze
-from figures import Cube
+# from figures import Cube
+from figures import Cylinder
 
 # FIGURE: CICLE
 # ob_circle = Circle()
@@ -25,9 +26,17 @@ from figures import Cube
 # ob_trapeze.show_result()
 
 # FIGURE: CUBE
-ob_cube = Cube()
-ob_cube.get_name()
-ob_cube.enter_data()
-ob_cube.calculate_volume()
-ob_cube.calculate_surface_area()
-ob_cube.show_result()
+# ob_cube = Cube()
+# ob_cube.get_name()
+# ob_cube.enter_data()
+# ob_cube.calculate_volume()
+# ob_cube.calculate_surface_area()
+# ob_cube.show_result()
+
+# FIGURE: CYLINDER 
+ob_cylinder = Cylinder()
+ob_cylinder.get_name()
+ob_cylinder.enter_data()
+ob_cylinder.calculate_volume()
+ob_cylinder.calculate_surface_area()
+ob_cylinder.show_result()
