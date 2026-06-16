@@ -31,14 +31,19 @@ class Circle(Figures2D):
     def __init__(self):
         self.name = 'Circle'
         self.radio = None
+        
     def get_name(self):
         print(self.name)
+
     def enter_data(self):
         self.radio = float(input(f'enter the data:'))
+
     def calculate_area(self):
         self.area = math.pi * self.radio ** 2
+
     def calculate_perimeter(self):
         self.perimeter = 2 * self.radio * math.pi
+
     def show_result(self):
         print(f'The area of ​​the circle is:{self.area:.2f}\nThe perimeter of the circle is:{self.perimeter:.2f}')
         
@@ -47,17 +52,23 @@ class Rectangle(Figures2D):
         self.name = 'Rectangle'
         self.base = None
         self.height = None
+
     def get_name(self):
         print(self.name)
+
     def enter_data(self):
         self.base = float(input(f'enter the data base:'))
         self.height = float(input(f'enter the data height:'))
+
     def calculate_area(self):
         self.area = self.base * self.height
+
     def calculate_perimeter(self):
         self.perimeter = 2 * (self.base + self.height)
+
     def show_result(self):
         print(f'The area of the rectangles is: {self.area:.2f}\nThe perimeter of the rectangles is:{self.perimeter:.2f}')
+
 class Trapeze(Figures2D):
     def __init__(self):
         self.name = 'Trapeze'
@@ -66,6 +77,7 @@ class Trapeze(Figures2D):
         self.height = None
         self.lado1 = None
         self.lado2 = None
+
     def get_name(self):
         print(self.name)
 
@@ -84,19 +96,28 @@ class Trapeze(Figures2D):
 
     def show_result(self):
         print(f'The area of the trapeze is: {self.area:.2f}\nThe perimeter of the trapeze is:{self.perimeter:.2f}')
-
-
 class Cube(Figures3D):
+    def __init__(self):
+        self.name = 'Cube'
+        self.sides = None
+        self.diagonal = None
+
     def get_name(self):
-        pass
+        print(self.name)
+
     def enter_data(self):
-        pass
-    def show_result(self):
-        pass
+        self.sides = float(input(f'enter the data sides: '))
+        self.diagonal = float(input(f'enter the data diagonal: '))
+
     def calculate_volume(self):
-        pass
+        self.volume = self.sides ** 3
+        self.diagonal = self.sides * math.sqrt(3)
+
     def calculate_surface_area(self):
-        pass
+        self.surface_area = 6 * self.sides ** 2
+
+    def show_result(self):
+        print(f'The volume of the Cube is: {self.volume:.2f}\nThe diagonal of the Cube is: {self.diagonal:.2f}\nThe surface area is: {self.surface_area:.2f}')
 
 class Cylinder(Figures3D):
     def get_name(self):
