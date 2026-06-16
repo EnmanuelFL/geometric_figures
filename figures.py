@@ -128,8 +128,8 @@ class Cylinder(Figures3D):
         print(self.name)
 
     def enter_data(self):
-        self.height = float(input('Enter de data heigth: '))
-        self.radio = float(input('Enter de data radio: '))
+        self.height = float(input('Enter the data heigth: '))
+        self.radio = float(input('Enter the data radio: '))
 
     def calculate_volume(self):
         self.volume = math.pi  * self.radio ** 2 * self.height
@@ -140,13 +140,21 @@ class Cylinder(Figures3D):
     def show_result(self):
         print(f'The volume of Cylinder is: {self.volume:.2f}\nThe superface area of Cylinder is: {self.superface_area:.2f}')
 class Sphere(Figures3D):
+    def __init__(self):
+        self.name = 'Sphere'
+        self.radio = None
+    
     def get_name(self):
-        pass
+        print(self.name)
+
     def enter_data(self):
-        pass
-    def show_result(self):
-        pass
+        self.radio = float(input('Enter the data radio: ')) 
+
     def calculate_volume(self):
-        pass
+        self.volume = (4/3) * math.pi * self.radio ** 3
+
     def calculate_surface_area(self):
-        pass
+        self.surface_area = 4 * math.pi * self.radio ** 2
+
+    def show_result(self):
+        print(f'The volume of Sphere is: {self.volume:.2f}\nThe surface area of Sphere is: {self.surface_area:.2f}')
