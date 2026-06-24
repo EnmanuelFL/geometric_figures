@@ -45,6 +45,8 @@ class Circle(Figures2D):
         self.perimeter = 2 * self.radio * math.pi
 
     def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
         print(f'The area of ​​the circle is:{self.area:.2f}\nThe perimeter of the circle is:{self.perimeter:.2f}')
         
 class Rectangle(Figures2D):
@@ -67,6 +69,8 @@ class Rectangle(Figures2D):
         self.perimeter = 2 * (self.base + self.height)
 
     def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
         print(f'The area of the rectangles is: {self.area:.2f}\nThe perimeter of the rectangles is:{self.perimeter:.2f}')
 
 class Trapeze(Figures2D):
@@ -95,6 +99,8 @@ class Trapeze(Figures2D):
         self.perimeter = self.base + self.base_minior + self.lado1 + self.lado2
 
     def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
         print(f'The area of the trapeze is: {self.area:.2f}\nThe perimeter of the trapeze is:{self.perimeter:.2f}')
 class Cube(Figures3D):
     def __init__(self):
@@ -116,6 +122,8 @@ class Cube(Figures3D):
         self.surface_area = 6 * self.sides ** 2
 
     def show_result(self):
+        self.calculate_volume()
+        self.calculate_surface_area()
         print(f'The volume of the Cube is: {self.volume:.2f}\nThe diagonal of the Cube is: {self.diagonal:.2f}\nThe surface area is: {self.surface_area:.2f}')
 
 class Cylinder(Figures3D):
@@ -138,6 +146,8 @@ class Cylinder(Figures3D):
         self.superface_area = 2 * math.pi * self.radio ** 2 + 2 * math.pi * self.radio * self.height
 
     def show_result(self):
+        self.calculate_volume()
+        self.calculate_surface_area()
         print(f'The volume of Cylinder is: {self.volume:.2f}\nThe superface area of Cylinder is: {self.superface_area:.2f}')
 class Sphere(Figures3D):
     def __init__(self):
@@ -157,4 +167,6 @@ class Sphere(Figures3D):
         self.surface_area = 4 * math.pi * self.radio ** 2
 
     def show_result(self):
+        self.calculate_volume()
+        self.calculate_surface_area()
         print(f'The volume of Sphere is: {self.volume:.2f}\nThe surface area of Sphere is: {self.surface_area:.2f}')
