@@ -51,28 +51,28 @@ ALL_FIGURES = FIGURES_2D + FIGURES_3D
 NAME_TO_CLASS = {cls.name: cls for cls in ALL_FIGURES}
 
 TOOLS = [
-    ("scale", "Scale Calculator", ScaleTool),
-    ("materials", "Materials Calculator", MaterialsTool),
-    ("stairs", "Stair Calculator", StairsTool),
-    ("slopes", "Slope & Ramp Calculator", SlopesTool),
-    ("units", "Unit Converter", UnitsTool),
-    ("triangles", "Triangle Solver", TrianglesTool),
-    ("roofs", "Roof Calculator", RoofsTool),
+    ("scale", "Calculadora de escala", ScaleTool),
+    ("materials", "Calculadora de materiales", MaterialsTool),
+    ("stairs", "Calculadora de escaleras", StairsTool),
+    ("slopes", "Calculadora de pendientes y rampas", SlopesTool),
+    ("units", "Conversor de unidades", UnitsTool),
+    ("triangles", "Resolvedor de triángulos", TrianglesTool),
+    ("roofs", "Calculadora de techos", RoofsTool),
 ]
 TOOL_KEY_BY_NAME = {cls.tool_name: key for key, _, cls in TOOLS}
 
 REFERENCES = [
-    ("materials", "Material strength"),
-    ("normative", "Normative dimensions"),
-    ("golden", "Golden ratio"),
-    ("weights", "Weights per m²"),
+    ("materials", "Resistencia de materiales"),
+    ("normative", "Dimensiones normativas"),
+    ("golden", "Proporción áurea"),
+    ("weights", "Pesos por m²"),
 ]
 
 
 class MainWindow(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Geometry Figures")
+        self.title("Figuras Geométricas")
         self.geometry("1060x720")
         self.minsize(920, 640)
 
@@ -85,7 +85,7 @@ class MainWindow(ctk.CTk):
 
         self.brand = ctk.CTkLabel(
             self.topbar,
-            text="Geometry Figures",
+            text="Figuras Geométricas",
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=t("text"),
         )
@@ -93,7 +93,7 @@ class MainWindow(ctk.CTk):
 
         self.theme_toggle = ctk.CTkSegmentedButton(
             self.topbar,
-            values=["Light", "Dark"],
+            values=["Claro", "Oscuro"],
             command=self._on_theme,
             selected_color=t("accent"),
             selected_hover_color=t("accent_hover"),
@@ -131,7 +131,7 @@ class MainWindow(ctk.CTk):
 
         theme.register(self.apply_theme)
         saved = settings.get_theme()
-        self.theme_toggle.set(saved.title())
+        self.theme_toggle.set("Claro" if saved == "light" else "Oscuro")
         theme.set_mode(saved)
 
     def apply_theme(self):
@@ -147,7 +147,7 @@ class MainWindow(ctk.CTk):
         )
 
     def _on_theme(self, value):
-        mode = value.lower()
+        mode = "light" if value == "Claro" else "dark"
         theme.set_mode(mode)
         settings.set_theme(mode)
 
@@ -157,9 +157,9 @@ class MainWindow(ctk.CTk):
         widget.pack(fill="both", expand=True)
 
     def on_section_change(self, section):
-        if section == "Figures":
+        if section == "Figuras":
             self.show_content(self.result_panel)
-        elif section == "Tools":
+        elif section == "Herramientas":
             if self.current_tool_key in self.tool_screens:
                 self.show_content(self.tool_screens[self.current_tool_key])
             else:
@@ -209,13 +209,13 @@ class MainWindow(ctk.CTk):
         if module == "tools":
             key = TOOL_KEY_BY_NAME.get(entry.get("figure"))
             if key:
-                self.sidebar.set_section("Tools")
+                self.sidebar.set_section("Herramientas")
                 self.on_tool_select(key)
                 self.tool_screens[key].set_inputs(entry.get("parameters", {}))
             return
         figure_class = NAME_TO_CLASS.get(entry.get("figure"))
         if figure_class:
-            self.sidebar.set_section("Figures")
+            self.sidebar.set_section("Figuras")
             self.result_panel.load_entry(figure_class, entry)
 
     def on_history_delete(self, entry_id):

@@ -27,7 +27,7 @@ class SidebarPanel(ctk.CTkFrame):
 
         self.nav = ctk.CTkSegmentedButton(
             self,
-            values=["Figures", "Tools", "Reference"],
+            values=["Figuras", "Herramientas", "Referencia"],
             command=self._on_nav,
             selected_color=t("accent"),
             selected_hover_color=t("accent_hover"),
@@ -51,7 +51,7 @@ class SidebarPanel(ctk.CTkFrame):
 
         history_header = ctk.CTkLabel(
             self,
-            text="History",
+            text="Historial",
             font=ctk.CTkFont(size=13, weight="bold"),
             text_color=t("text"),
         )
@@ -59,7 +59,7 @@ class SidebarPanel(ctk.CTkFrame):
 
         history_subtitle = ctk.CTkLabel(
             self,
-            text="Last 20 calculations",
+            text="Últimos 20 cálculos",
             font=ctk.CTkFont(size=11),
             text_color=t("muted"),
         )
@@ -68,7 +68,7 @@ class SidebarPanel(ctk.CTkFrame):
         self.history_scroll = ctk.CTkScrollableFrame(self, fg_color="transparent", corner_radius=0)
         self.history_scroll.pack(fill="both", expand=True, padx=10, pady=(0, 12))
 
-        self.set_section("Figures")
+        self.set_section("Figuras")
         self.update_history([])
         theme.register(self.apply_theme)
 
@@ -81,6 +81,8 @@ class SidebarPanel(ctk.CTkFrame):
             unselected_hover_color=t("border"),
         )
         self.separator.configure(fg_color=t("border"))
+        for scrollable in (self.figures_view, self.tools_view, self.reference_view, self.history_scroll):
+            scrollable.configure(fg_color="transparent")
         if self.figure_buttons:
             self.set_figures(self.figures_2d, self.figures_3d)
         if self.selected_cls:
@@ -98,9 +100,9 @@ class SidebarPanel(ctk.CTkFrame):
         for view in (self.figures_view, self.tools_view, self.reference_view):
             view.pack_forget()
         view = {
-            "Figures": self.figures_view,
-            "Tools": self.tools_view,
-            "Reference": self.reference_view,
+            "Figuras": self.figures_view,
+            "Herramientas": self.tools_view,
+            "Referencia": self.reference_view,
         }[section]
         view.pack(fill="both", expand=True)
 
@@ -187,11 +189,11 @@ class SidebarPanel(ctk.CTkFrame):
         self.on_select_figure(cls)
 
     def _select_tool(self, key):
-        self.set_section("Tools")
+        self.set_section("Herramientas")
         self.on_tool_select(key)
 
     def _select_reference(self, key):
-        self.set_section("Reference")
+        self.set_section("Referencia")
         self.on_reference_select(key)
 
     def update_history(self, entries):
@@ -200,7 +202,7 @@ class SidebarPanel(ctk.CTkFrame):
         if not entries:
             ctk.CTkLabel(
                 self.history_scroll,
-                text="No calculations yet.\nResults will appear here.",
+                text="Aún no hay cálculos.\nLos resultados aparecerán aquí.",
                 font=ctk.CTkFont(size=12),
                 text_color=t("muted"),
                 justify="center",
@@ -211,7 +213,8 @@ class SidebarPanel(ctk.CTkFrame):
             row.pack(fill="x", pady=2)
             timestamp = entry.get("timestamp", "")[:16]
             module = entry.get("module", "figures")
-            tag = f"[{module}]" if module != "figures" else ""
+            module_tag = {"tools": "herramientas", "reference": "referencia"}.get(module, module)
+            tag = f"[{module_tag}]" if module != "figures" else ""
             label = ctk.CTkButton(
                 row,
                 text=f'{tag} {entry["figure"]}  ·  {timestamp}'.strip(),

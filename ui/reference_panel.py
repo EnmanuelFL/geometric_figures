@@ -128,16 +128,16 @@ class MaterialsScreen(ReferenceScreen):
         super().__init__(master)
         data = _load_data()
         self.set_header(
-            "Material Strength",
-            "Reference compressive and tensile strength, and specific weight of common building materials.",
+            "Resistencia de materiales",
+            "Resistencia a compresión y tracción de referencia, y peso específico de materiales de construcción comunes.",
         )
         rows = [
             (m["material"], m["compression"], m["tension"], m["density"])
             for m in data["materials"]
         ]
         self.add_table(
-            "Materials",
-            ["Material", "Compression (MPa)", "Tension (MPa)", "Weight (kg/m³)"],
+            "Materiales",
+            ["Material", "Compresión (MPa)", "Tracción (MPa)", "Peso (kg/m³)"],
             rows,
         )
 
@@ -147,22 +147,22 @@ class NormativeScreen(ReferenceScreen):
         super().__init__(master)
         data = _load_data()
         self.set_header(
-            "Basic Normative Dimensions",
-            "Reference minimum dimensions commonly used in residential and commercial design.",
+            "Dimensiones normativas básicas",
+            "Dimensiones mínimas de referencia usadas habitualmente en diseño residencial y comercial.",
         )
         self.add_table(
-            "Minimum heights by use",
-            ["Use", "Min. height"],
+            "Alturas mínimas según uso",
+            ["Uso", "Altura mín."],
             [(h["use"], h["min"]) for h in data["heights"]],
         )
         self.add_table(
-            "Minimum widths",
-            ["Element", "Min. width"],
+            "Anchos mínimos",
+            ["Elemento", "Ancho mín."],
             [(w["item"], w["min"]) for w in data["widths"]],
         )
         self.add_table(
-            "Parking dimensions",
-            ["Type", "Dimensions"],
+            "Dimensiones de aparcamiento",
+            ["Tipo", "Dimensiones"],
             [(p["type"], p["dimensions"]) for p in data["parking"]],
         )
 
@@ -172,12 +172,12 @@ class WeightsScreen(ReferenceScreen):
         super().__init__(master)
         data = _load_data()
         self.set_header(
-            "Weights per m²",
-            "Typical surface weights of common building elements for structural estimation.",
+            "Pesos por m²",
+            "Pesos superficiales típicos de elementos de construcción comunes para la estimación estructural.",
         )
         self.add_table(
-            "Elements",
-            ["Element", "Weight"],
+            "Elementos",
+            ["Elemento", "Peso"],
             [(w["element"], w["weight"]) for w in data["weights"]],
         )
 
@@ -186,12 +186,12 @@ class GoldenRatioScreen(ReferenceScreen):
     def __init__(self, master):
         super().__init__(master)
         self.set_header(
-            "Golden Ratio",
-            "Derive golden proportions from a base measure and visualize the golden rectangle with its spiral.",
+            "Proporción áurea",
+            "Deriva proporciones áureas a partir de una medida base y visualiza el rectángulo áureo con su espiral.",
         )
         row = ctk.CTkFrame(self.body, fg_color="transparent")
         row.pack(fill="x", pady=(4, 8))
-        self._label(row, "Base measure", "value", size=13).pack(side="left")
+        self._label(row, "Medida base", "value", size=13).pack(side="left")
         self.base_entry = self._entry(row)
         self.base_entry.pack(side="left", fill="x", expand=True, padx=12)
         self.base_entry.insert(0, "10")

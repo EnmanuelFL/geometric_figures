@@ -24,7 +24,7 @@ class ResultPanel(ctk.CTkFrame):
 
         self.title_label = ctk.CTkLabel(
             self,
-            text="No figure selected",
+            text="Ninguna figura seleccionada",
             font=ctk.CTkFont(size=20, weight="bold"),
             text_color=t("text"),
             anchor="w",
@@ -72,7 +72,7 @@ class ResultPanel(ctk.CTkFrame):
 
         self.calc_button = ctk.CTkButton(
             self,
-            text="Calculate",
+            text="Calcular",
             height=38,
             corner_radius=8,
             fg_color=t("accent"),
@@ -181,17 +181,17 @@ class ResultPanel(ctk.CTkFrame):
             name, label = param["name"], param["label"]
             raw = self.entries[name].get().strip()
             if not raw:
-                return None, f"Please enter a value for '{label}'."
+                return None, f"Introduce un valor para '{label}'."
             try:
                 value = float(raw)
             except ValueError:
-                return None, f"'{raw}' is not a valid number for '{label}'."
+                return None, f"'{raw}' no es un número válido para '{label}'."
             if value <= 0:
-                return None, f"'{label}' must be greater than zero."
+                return None, f"'{label}' debe ser mayor que cero."
             if name == "sides" and (value != int(value) or int(value) < 3):
-                return None, "'Number of sides (n)' must be an integer of at least 3."
+                return None, "El número de lados (n) debe ser un entero de al menos 3."
             if name == "angle" and value > 360:
-                return None, "'Angle' must be between 0 and 360 degrees."
+                return None, "El ángulo debe estar entre 0 y 360 grados."
             values[name] = value
         return values, None
 
@@ -209,14 +209,14 @@ class ResultPanel(ctk.CTkFrame):
         try:
             results = figure.calculate_results()
         except Exception as exc:
-            self.show_error(f"Calculation failed: {exc}")
+            self.show_error(f"Error en el cálculo: {exc}")
             return
         draw(self.canvas, figure, values, theme.palette)
         self._show_results(results)
         self.current_values = {k: v for k, v in values.items()}
         self.current_results = [[label, value, unit] for label, value, unit in results]
         self.current_figure = figure
-        self.status_label.configure(text="Saved to history.")
+        self.status_label.configure(text="Guardado en el historial.")
         self.on_calculate(figure, self.current_values, self.current_results)
 
     def load_entry(self, figure_class, entry):

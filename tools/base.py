@@ -11,7 +11,7 @@ def _fmt(value, unit):
 
 class ToolScreen(ctk.CTkFrame):
     tool_key = "tool"
-    tool_name = "Tool"
+    tool_name = "Herramienta"
     description = ""
 
     def __init__(self, master, on_save):
@@ -61,7 +61,7 @@ class ToolScreen(ctk.CTkFrame):
 
         self.save_button = ctk.CTkButton(
             self,
-            text="Save to history",
+            text="Guardar en el historial",
             height=34,
             corner_radius=8,
             fg_color=t("accent"),
@@ -140,11 +140,11 @@ class ToolScreen(ctk.CTkFrame):
         else:
             raw = widget.get().strip()
         if not raw:
-            raise ValueError(f"Please enter a value for '{label}'.")
+            raise ValueError(f"Introduce un valor para '{label}'.")
         try:
             return float(raw)
         except ValueError:
-            raise ValueError(f"'{raw}' is not a valid number for '{label}'.")
+            raise ValueError(f"'{raw}' no es un número válido para '{label}'.")
 
     def _get_option(self, name):
         widget = self.entry_vars[name]

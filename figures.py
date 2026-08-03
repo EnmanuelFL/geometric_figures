@@ -55,8 +55,8 @@ class Figures2D(Figure):
         self.calculate_area()
         self.calculate_perimeter()
         results = [
-            ("Area", self.area, "cm²"),
-            ("Perimeter", self.perimeter, "cm"),
+            ("Área", self.area, "cm²"),
+            ("Perímetro", self.perimeter, "cm"),
         ]
         results.extend(self._extra_results())
         return results
@@ -78,8 +78,8 @@ class Figures3D(Figure):
         self.calculate_volume()
         self.calculate_surface_area()
         results = [
-            ("Volume", self.volume, "cm³"),
-            ("Surface Area", self.surface_area, "cm²"),
+            ("Volumen", self.volume, "cm³"),
+            ("Área superficial", self.surface_area, "cm²"),
         ]
         results.extend(self._extra_results())
         return results
@@ -89,9 +89,9 @@ class Figures3D(Figure):
 
 
 class Circle(Figures2D):
-    name = "Circle"
-    PARAMETERS = [{"name": "radio", "label": "Radius", "unit": "cm"}]
-    DESCRIPTION = "Perfectly round 2D shape; every point on its edge is equally far from the center."
+    name = "Círculo"
+    PARAMETERS = [{"name": "radio", "label": "Radio", "unit": "cm"}]
+    DESCRIPTION = "Figura 2D perfectamente redonda; todos los puntos de su borde equidistan del centro."
     FORMULA = "A = π·r²   |   P = 2·π·r"
 
     def __init__(self):
@@ -116,12 +116,12 @@ class Circle(Figures2D):
 
 
 class Rectangle(Figures2D):
-    name = "Rectangle"
+    name = "Rectángulo"
     PARAMETERS = [
         {"name": "base", "label": "Base", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
     ]
-    DESCRIPTION = "Flat shape with four straight sides and four right angles."
+    DESCRIPTION = "Figura plana con cuatro lados rectos y cuatro ángulos rectos."
     FORMULA = "A = b·h   |   P = 2·(b + h)"
 
     def __init__(self):
@@ -148,15 +148,15 @@ class Rectangle(Figures2D):
 
 
 class Trapeze(Figures2D):
-    name = "Trapeze"
+    name = "Trapecio"
     PARAMETERS = [
-        {"name": "base", "label": "Base (major)", "unit": "cm"},
-        {"name": "base_minior", "label": "Base (minor)", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
-        {"name": "lado1", "label": "Side 1", "unit": "cm"},
-        {"name": "lado2", "label": "Side 2", "unit": "cm"},
+        {"name": "base", "label": "Base mayor (B)", "unit": "cm"},
+        {"name": "base_minior", "label": "Base menor (b)", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
+        {"name": "lado1", "label": "Lado 1", "unit": "cm"},
+        {"name": "lado2", "label": "Lado 2", "unit": "cm"},
     ]
-    DESCRIPTION = "Four-sided shape with one pair of parallel sides (the bases)."
+    DESCRIPTION = "Figura de cuatro lados con un par de lados paralelos (las bases)."
     FORMULA = "A = (B + b)·h / 2   |   P = B + b + l₁ + l₂"
 
     def __init__(self):
@@ -189,12 +189,12 @@ class Trapeze(Figures2D):
 
 
 class RegularPolygon(Figures2D):
-    name = "Regular Polygon"
+    name = "Polígono regular"
     PARAMETERS = [
-        {"name": "sides", "label": "Number of sides (n)", "unit": ""},
-        {"name": "side", "label": "Side length", "unit": "cm"},
+        {"name": "sides", "label": "Número de lados (n)", "unit": ""},
+        {"name": "side", "label": "Longitud del lado", "unit": "cm"},
     ]
-    DESCRIPTION = "2D shape with n equal sides and n equal angles."
+    DESCRIPTION = "Figura 2D con n lados iguales y n ángulos iguales."
     FORMULA = "A = n·s² / (4·tan(π/n))   |   P = n·s"
 
     def __init__(self):
@@ -221,13 +221,13 @@ class RegularPolygon(Figures2D):
 
 
 class CircularSector(Figures2D):
-    name = "Circular Sector"
+    name = "Sector circular"
     PARAMETERS = [
-        {"name": "radio", "label": "Radius", "unit": "cm"},
-        {"name": "angle", "label": "Angle", "unit": "°"},
+        {"name": "radio", "label": "Radio", "unit": "cm"},
+        {"name": "angle", "label": "Ángulo", "unit": "°"},
     ]
-    DESCRIPTION = "Slice of a circle bounded by two radii and the arc between them."
-    FORMULA = "A = (θ/360)·π·r²   |   Arc = (θ/360)·2·π·r"
+    DESCRIPTION = "Porción de un círculo delimitada por dos radios y el arco entre ellos."
+    FORMULA = "A = (θ/360)·π·r²   |   Arco = (θ/360)·2·π·r"
 
     def __init__(self):
         self.radio = None
@@ -248,7 +248,7 @@ class CircularSector(Figures2D):
         self.perimeter = self.arc + 2 * self.radio
 
     def _extra_results(self):
-        return [("Arc Length", self.arc, "cm")]
+        return [("Longitud de arco", self.arc, "cm")]
 
     def show_result(self):
         self.calculate_area()
@@ -257,12 +257,12 @@ class CircularSector(Figures2D):
 
 
 class Annulus(Figures2D):
-    name = "Annulus"
+    name = "Anillo"
     PARAMETERS = [
-        {"name": "radio", "label": "Outer radius (R)", "unit": "cm"},
-        {"name": "radio_inner", "label": "Inner radius (r)", "unit": "cm"},
+        {"name": "radio", "label": "Radio exterior (R)", "unit": "cm"},
+        {"name": "radio_inner", "label": "Radio interior (r)", "unit": "cm"},
     ]
-    DESCRIPTION = "Region between two concentric circles, like a ring."
+    DESCRIPTION = "Región entre dos círculos concéntricos, como un anillo."
     FORMULA = "A = π·(R² − r²)   |   P = 2·π·(R + r)"
 
     def __init__(self):
@@ -284,7 +284,7 @@ class Annulus(Figures2D):
 
     def validate(self):
         if self.radio_inner >= self.radio:
-            return "Inner radius must be smaller than outer radius."
+            return "El radio interior debe ser menor que el radio exterior."
         return None
 
     def show_result(self):
@@ -294,9 +294,9 @@ class Annulus(Figures2D):
 
 
 class Cube(Figures3D):
-    name = "Cube"
-    PARAMETERS = [{"name": "sides", "label": "Side", "unit": "cm"}]
-    DESCRIPTION = "Solid with six identical square faces."
+    name = "Cubo"
+    PARAMETERS = [{"name": "sides", "label": "Lado", "unit": "cm"}]
+    DESCRIPTION = "Sólido con seis caras cuadradas idénticas."
     FORMULA = "V = s³   |   A = 6·s²"
 
     def __init__(self):
@@ -322,16 +322,16 @@ class Cube(Figures3D):
     def show_result(self):
         self.calculate_volume()
         self.calculate_surface_area()
-        print(f'The volume of the Cube is: {self.volume:.2f}\nThe diagonal of the Cube is: {self.diagonal:.2f}\nThe surface area is: {self.surface_area:.2f}')
+        print(f'El volumen del cubo es: {self.volume:.2f}\nLa diagonal del cubo es: {self.diagonal:.2f}\nEl área superficial es: {self.surface_area:.2f}')
 
 
 class Cylinder(Figures3D):
-    name = "Cylinder"
+    name = "Cilindro"
     PARAMETERS = [
-        {"name": "height", "label": "Height", "unit": "cm"},
-        {"name": "radio", "label": "Radius", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
+        {"name": "radio", "label": "Radio", "unit": "cm"},
     ]
-    DESCRIPTION = "Solid with two circular bases joined by a curved surface."
+    DESCRIPTION = "Sólido con dos bases circulares unidas por una superficie curva."
     FORMULA = "V = π·r²·h   |   A = 2·π·r·(r + h)"
 
     def __init__(self):
@@ -358,9 +358,9 @@ class Cylinder(Figures3D):
 
 
 class Sphere(Figures3D):
-    name = "Sphere"
-    PARAMETERS = [{"name": "radio", "label": "Radius", "unit": "cm"}]
-    DESCRIPTION = "Perfectly round 3D shape; every point on its surface is equally far from the center."
+    name = "Esfera"
+    PARAMETERS = [{"name": "radio", "label": "Radio", "unit": "cm"}]
+    DESCRIPTION = "Figura 3D perfectamente redonda; todos los puntos de su superficie equidistan del centro."
     FORMULA = "V = (4/3)·π·r³   |   A = 4·π·r²"
 
     def __init__(self):
@@ -385,14 +385,14 @@ class Sphere(Figures3D):
 
 
 class RectangularPyramid(Figures3D):
-    name = "Rectangular Pyramid"
+    name = "Pirámide rectangular"
     PARAMETERS = [
-        {"name": "base", "label": "Base length", "unit": "cm"},
-        {"name": "width", "label": "Base width", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
+        {"name": "base", "label": "Largo de la base", "unit": "cm"},
+        {"name": "width", "label": "Ancho de la base", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
     ]
-    DESCRIPTION = "Solid with a rectangular base and triangular faces meeting at an apex."
-    FORMULA = "V = (1/3)·l·w·h   |   A = l·w + l·s₁ + w·s₂"
+    DESCRIPTION = "Sólido con base rectangular y caras triangulares que se unen en un vértice."
+    FORMULA = "V = (1/3)·l·a·h   |   A = l·a + l·s₁ + a·s₂"
 
     def __init__(self):
         self.base = None
@@ -422,13 +422,13 @@ class RectangularPyramid(Figures3D):
 
 
 class Cone(Figures3D):
-    name = "Cone"
+    name = "Cono"
     PARAMETERS = [
-        {"name": "radio", "label": "Radius", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
+        {"name": "radio", "label": "Radio", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
     ]
-    DESCRIPTION = "Solid with a circular base that tapers to a point."
-    FORMULA = "V = (1/3)·π·r²·h   |   A = π·r·(r + s),  s = √(r² + h²)"
+    DESCRIPTION = "Sólido con base circular que se estrecha hasta un punto."
+    FORMULA = "V = (1/3)·π·r²·h   |   A = π·r·(r + g),  g = √(r² + h²)"
 
     def __init__(self):
         self.radio = None
@@ -449,7 +449,7 @@ class Cone(Figures3D):
         self.surface_area = math.pi * self.radio * (self.radio + self.slant)
 
     def _extra_results(self):
-        return [("Slant Height", self.slant, "cm")]
+        return [("Generatriz", self.slant, "cm")]
 
     def show_result(self):
         self.calculate_volume()
@@ -458,14 +458,14 @@ class Cone(Figures3D):
 
 
 class RectangularPrism(Figures3D):
-    name = "Rectangular Prism"
+    name = "Prisma rectangular"
     PARAMETERS = [
-        {"name": "length", "label": "Length", "unit": "cm"},
-        {"name": "width", "label": "Width", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
+        {"name": "length", "label": "Largo", "unit": "cm"},
+        {"name": "width", "label": "Ancho", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
     ]
-    DESCRIPTION = "Solid with six rectangular faces, like a box."
-    FORMULA = "V = l·w·h   |   A = 2·(l·w + l·h + w·h)"
+    DESCRIPTION = "Sólido con seis caras rectangulares, como una caja."
+    FORMULA = "V = l·a·h   |   A = 2·(l·a + l·h + a·h)"
 
     def __init__(self):
         self.length = None
@@ -493,15 +493,15 @@ class RectangularPrism(Figures3D):
 
 
 class Triangle(Figures2D):
-    name = "Triangle"
+    name = "Triángulo"
     PARAMETERS = [
         {"name": "base", "label": "Base", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
-        {"name": "lado1", "label": "Side a", "unit": "cm"},
-        {"name": "lado2", "label": "Side b", "unit": "cm"},
-        {"name": "lado3", "label": "Side c", "unit": "cm"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
+        {"name": "lado1", "label": "Lado a", "unit": "cm"},
+        {"name": "lado2", "label": "Lado b", "unit": "cm"},
+        {"name": "lado3", "label": "Lado c", "unit": "cm"},
     ]
-    DESCRIPTION = "Three-sided 2D shape; sides equal (equilateral), two equal (isosceles) or all different (scalene)."
+    DESCRIPTION = "Figura 2D de tres lados; lados iguales (equilátero), dos iguales (isósceles) o todos distintos (escaleno)."
     FORMULA = "A = b·h / 2   |   P = a + b + c"
 
     def __init__(self):
@@ -530,19 +530,19 @@ class Triangle(Figures2D):
     def _triangle_type(self):
         a, b, c = self.lado1, self.lado2, self.lado3
         if a == b == c:
-            return "Equilateral"
+            return "Equilátero"
         if a == b or b == c or a == c:
-            return "Isosceles"
-        return "Scalene"
+            return "Isósceles"
+        return "Escaleno"
 
     def validate(self):
         sides = sorted([self.lado1, self.lado2, self.lado3])
         if sides[0] + sides[1] <= sides[2]:
-            return "These side lengths do not form a valid triangle."
+            return "Estas longitudes de lado no forman un triángulo válido."
         return None
 
     def _extra_results(self):
-        return [("Type", self._triangle_type(), "")]
+        return [("Tipo", self._triangle_type(), "")]
 
     def show_result(self):
         self.calculate_area()
@@ -551,12 +551,12 @@ class Triangle(Figures2D):
 
 
 class Ellipse(Figures2D):
-    name = "Ellipse"
+    name = "Elipse"
     PARAMETERS = [
-        {"name": "semi_major", "label": "Semi-major axis (a)", "unit": "cm"},
-        {"name": "semi_minor", "label": "Semi-minor axis (b)", "unit": "cm"},
+        {"name": "semi_major", "label": "Semieje mayor (a)", "unit": "cm"},
+        {"name": "semi_minor", "label": "Semieje menor (b)", "unit": "cm"},
     ]
-    DESCRIPTION = "Oval 2D shape defined by two perpendicular axes."
+    DESCRIPTION = "Figura 2D ovalada definida por dos ejes perpendiculares."
     FORMULA = "A = π·a·b   |   P ≈ π(a+b)·(1 + 3h/(10+√(4−3h))), h = ((a−b)/(a+b))²"
 
     def __init__(self):
@@ -581,7 +581,7 @@ class Ellipse(Figures2D):
 
     def validate(self):
         if self.semi_major < self.semi_minor:
-            return "Semi-major axis (a) must be greater than or equal to semi-minor axis (b)."
+            return "El semieje mayor (a) debe ser mayor o igual que el semieje menor (b)."
         return None
 
     def show_result(self):
@@ -591,13 +591,13 @@ class Ellipse(Figures2D):
 
 
 class Rhombus(Figures2D):
-    name = "Rhombus"
+    name = "Rombo"
     PARAMETERS = [
-        {"name": "diag_major", "label": "Major diagonal (D)", "unit": "cm"},
-        {"name": "diag_minor", "label": "Minor diagonal (d)", "unit": "cm"},
+        {"name": "diag_major", "label": "Diagonal mayor (D)", "unit": "cm"},
+        {"name": "diag_minor", "label": "Diagonal menor (d)", "unit": "cm"},
     ]
-    DESCRIPTION = "Four equal sides; diagonals cross at right angles."
-    FORMULA = "A = D·d / 2   |   side = √((D/2)² + (d/2)²)   |   P = 4·side"
+    DESCRIPTION = "Cuatro lados iguales; las diagonales se cruzan en ángulo recto."
+    FORMULA = "A = D·d / 2   |   lado = √((D/2)² + (d/2)²)   |   P = 4·lado"
 
     def __init__(self):
         self.diag_major = None
@@ -618,7 +618,7 @@ class Rhombus(Figures2D):
         self.perimeter = 4 * self.side
 
     def _extra_results(self):
-        return [("Side", self.side, "cm")]
+        return [("Lado", self.side, "cm")]
 
     def show_result(self):
         self.calculate_area()
@@ -627,14 +627,14 @@ class Rhombus(Figures2D):
 
 
 class Parallelogram(Figures2D):
-    name = "Parallelogram"
+    name = "Paralelogramo"
     PARAMETERS = [
         {"name": "base", "label": "Base", "unit": "cm"},
-        {"name": "height", "label": "Height", "unit": "cm"},
-        {"name": "angle", "label": "Angle", "unit": "°"},
+        {"name": "height", "label": "Altura", "unit": "cm"},
+        {"name": "angle", "label": "Ángulo", "unit": "°"},
     ]
-    DESCRIPTION = "Four-sided shape with two pairs of parallel sides."
-    FORMULA = "A = b·h   |   P = 2·b + 2·h / sin(θ)"
+    DESCRIPTION = "Figura de cuatro lados con dos pares de lados paralelos."
+    FORMULA = "A = b·h   |   P = 2·b + 2·h / sen(θ)"
 
     def __init__(self):
         self.base = None
@@ -658,11 +658,11 @@ class Parallelogram(Figures2D):
 
     def validate(self):
         if self.angle >= 180:
-            return "Angle must be between 0 and 180 degrees."
+            return "El ángulo debe estar entre 0 y 180 grados."
         return None
 
     def _extra_results(self):
-        return [("Side", self.side, "cm")]
+        return [("Lado", self.side, "cm")]
 
     def show_result(self):
         self.calculate_area()
@@ -671,12 +671,12 @@ class Parallelogram(Figures2D):
 
 
 class Torus(Figures3D):
-    name = "Torus"
+    name = "Toro"
     PARAMETERS = [
-        {"name": "major_radius", "label": "Major radius (R)", "unit": "cm"},
-        {"name": "minor_radius", "label": "Minor radius (r)", "unit": "cm"},
+        {"name": "major_radius", "label": "Radio mayor (R)", "unit": "cm"},
+        {"name": "minor_radius", "label": "Radio menor (r)", "unit": "cm"},
     ]
-    DESCRIPTION = "3D ring shape (like a donut) made by rotating a circle around an axis."
+    DESCRIPTION = "Figura 3D con forma de anillo (como una rosquilla) generada al girar un círculo alrededor de un eje."
     FORMULA = "V = 2·π²·R·r²   |   A = 4·π²·R·r"
 
     def __init__(self):
@@ -698,7 +698,7 @@ class Torus(Figures3D):
 
     def validate(self):
         if self.major_radius <= self.minor_radius:
-            return "Major radius (R) must be greater than minor radius (r)."
+            return "El radio mayor (R) debe ser mayor que el radio menor (r)."
         return None
 
     def show_result(self):
@@ -708,9 +708,9 @@ class Torus(Figures3D):
 
 
 class Tetrahedron(Figures3D):
-    name = "Tetrahedron"
-    PARAMETERS = [{"name": "side", "label": "Side", "unit": "cm"}]
-    DESCRIPTION = "Solid with four triangular faces, like a triangular pyramid."
+    name = "Tetraedro"
+    PARAMETERS = [{"name": "side", "label": "Lado", "unit": "cm"}]
+    DESCRIPTION = "Sólido con cuatro caras triangulares, como una pirámide triangular."
     FORMULA = "V = a³ / (6·√2)   |   A = √3·a²"
 
     def __init__(self):
