@@ -2,24 +2,31 @@ import tkinter as tk
 
 import customtkinter as ctk
 
-from ui import ACCENT, ACCENT_SOFT, BORDER, CANVAS_BG, ERROR, PANEL, SUCCESS, TEXT, TEXT_MUTED
+from ui import theme, t
 from ui.drawer import draw
+
+
+def _fmt(value, unit):
+    if isinstance(value, (int, float)):
+        return f"{value:.2f} {unit}".strip()
+    return f"{value} {unit}".strip()
 
 
 class ResultPanel(ctk.CTkFrame):
     def __init__(self, master, on_calculate, **kwargs):
-        super().__init__(master, fg_color=PANEL, corner_radius=12, **kwargs)
+        super().__init__(master, fg_color=t("panel"), corner_radius=12, **kwargs)
         self.on_calculate = on_calculate
         self.figure_class = None
         self.entries = {}
         self.current_values = None
         self.current_results = None
+        self.current_figure = None
 
         self.title_label = ctk.CTkLabel(
             self,
             text="No figure selected",
             font=ctk.CTkFont(size=20, weight="bold"),
-            text_color=TEXT,
+            text_color=t("text"),
             anchor="w",
         )
         self.title_label.pack(fill="x", padx=20, pady=(18, 2))
@@ -28,7 +35,7 @@ class ResultPanel(ctk.CTkFrame):
             self,
             text="",
             font=ctk.CTkFont(size=13),
-            text_color=TEXT_MUTED,
+            text_color=t("muted"),
             justify="left",
             anchor="w",
             wraplength=520,
@@ -39,8 +46,8 @@ class ResultPanel(ctk.CTkFrame):
             self,
             text="",
             font=ctk.CTkFont(family="Consolas", size=13),
-            text_color=ACCENT,
-            fg_color=ACCENT_SOFT,
+            text_color=t("accent"),
+            fg_color=t("accent_soft"),
             corner_radius=8,
             anchor="w",
             padx=12,
@@ -48,15 +55,15 @@ class ResultPanel(ctk.CTkFrame):
         )
         self.formula_label.pack(fill="x", padx=20, pady=(0, 12))
 
-        self.canvas_box = ctk.CTkFrame(self, fg_color=CANVAS_BG, corner_radius=10)
+        self.canvas_box = ctk.CTkFrame(self, fg_color=t("canvas_bg"), corner_radius=10)
         self.canvas_box.pack(fill="x", padx=20, pady=(0, 12))
         self.canvas = tk.Canvas(
             self.canvas_box,
             width=540,
             height=190,
-            bg=CANVAS_BG,
+            bg=t("canvas_bg"),
             highlightthickness=1,
-            highlightbackground=BORDER,
+            highlightbackground=t("border"),
         )
         self.canvas.pack(padx=6, pady=6)
 
@@ -68,8 +75,8 @@ class ResultPanel(ctk.CTkFrame):
             text="Calculate",
             height=38,
             corner_radius=8,
-            fg_color=ACCENT,
-            hover_color="#453E9E",
+            fg_color=t("accent"),
+            hover_color=t("accent_hover"),
             text_color="#FFFFFF",
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self._calculate,
@@ -80,7 +87,7 @@ class ResultPanel(ctk.CTkFrame):
             self,
             text="",
             font=ctk.CTkFont(size=13),
-            text_color=ERROR,
+            text_color=t("error"),
             justify="left",
             anchor="w",
             wraplength=520,
@@ -91,7 +98,7 @@ class ResultPanel(ctk.CTkFrame):
             self,
             text="",
             font=ctk.CTkFont(size=13),
-            text_color=SUCCESS,
+            text_color=t("success"),
             justify="left",
             anchor="w",
         )
@@ -100,10 +107,33 @@ class ResultPanel(ctk.CTkFrame):
         self.results = ctk.CTkFrame(self, fg_color="transparent")
         self.results.pack(fill="both", expand=True, padx=20, pady=(0, 18))
 
+        theme.register(self.apply_theme)
+
+    def apply_theme(self):
+        self.configure(fg_color=t("panel"))
+        self.title_label.configure(text_color=t("text"))
+        self.desc_label.configure(text_color=t("muted"))
+        self.formula_label.configure(text_color=t("accent"), fg_color=t("accent_soft"))
+        self.canvas_box.configure(fg_color=t("canvas_bg"))
+        self.canvas.configure(bg=t("canvas_bg"), highlightbackground=t("border"))
+        self.calc_button.configure(fg_color=t("accent"), hover_color=t("accent_hover"))
+        self.error_label.configure(text_color=t("error"))
+        self.status_label.configure(text_color=t("success"))
+        for child in self.form.winfo_children():
+            if isinstance(child, ctk.CTkEntry):
+                child.configure(fg_color=t("entry_bg"), border_color=t("border"), text_color=t("text"))
+            elif isinstance(child, ctk.CTkLabel):
+                child.configure(text_color=t("text"))
+        if self.current_figure is not None and self.current_values is not None:
+            draw(self.canvas, self.current_figure, self.current_values, theme.palette)
+        if self.current_results is not None:
+            self._show_results(self.current_results)
+
     def show_figure(self, figure_class):
         self.figure_class = figure_class
         self.current_values = None
         self.current_results = None
+        self.current_figure = None
         self.error_label.configure(text="")
         self.status_label.configure(text="")
         self.canvas.delete("all")
@@ -128,7 +158,7 @@ class ResultPanel(ctk.CTkFrame):
                 self.form,
                 text=label_text,
                 font=ctk.CTkFont(size=13),
-                text_color=TEXT,
+                text_color=t("text"),
                 anchor="w",
             )
             label.grid(row=index, column=0, sticky="w", padx=(0, 12), pady=4)
@@ -136,9 +166,9 @@ class ResultPanel(ctk.CTkFrame):
                 self.form,
                 height=32,
                 corner_radius=8,
-                fg_color=CANVAS_BG,
-                border_color=BORDER,
-                text_color=TEXT,
+                fg_color=t("entry_bg"),
+                border_color=t("border"),
+                text_color=t("text"),
             )
             entry.grid(row=index, column=1, sticky="ew", pady=4)
             self.entries[param["name"]] = entry
@@ -163,8 +193,6 @@ class ResultPanel(ctk.CTkFrame):
             if name == "angle" and value > 360:
                 return None, "'Angle' must be between 0 and 360 degrees."
             values[name] = value
-        if self.figure_class.__name__ == "Annulus" and values.get("radio_inner") >= values.get("radio"):
-            return None, "Inner radius must be smaller than outer radius."
         return values, None
 
     def _calculate(self):
@@ -174,15 +202,20 @@ class ResultPanel(ctk.CTkFrame):
             return
         figure = self.figure_class()
         figure.set_values(values)
+        geometry_error = figure.validate()
+        if geometry_error:
+            self.show_error(geometry_error)
+            return
         try:
             results = figure.calculate_results()
         except Exception as exc:
             self.show_error(f"Calculation failed: {exc}")
             return
-        draw(self.canvas, figure, values)
+        draw(self.canvas, figure, values, theme.palette)
         self._show_results(results)
         self.current_values = {k: v for k, v in values.items()}
         self.current_results = [[label, value, unit] for label, value, unit in results]
+        self.current_figure = figure
         self.status_label.configure(text="Saved to history.")
         self.on_calculate(figure, self.current_values, self.current_results)
 
@@ -195,11 +228,12 @@ class ResultPanel(ctk.CTkFrame):
                 entry_widget.insert(0, str(parameters[name]))
         figure = figure_class()
         figure.set_values(parameters)
-        draw(self.canvas, figure, parameters)
-        results = [(label, float(value), unit) for label, value, unit in entry.get("results", [])]
+        draw(self.canvas, figure, parameters, theme.palette)
+        results = [(label, value, unit) for label, value, unit in entry.get("results", [])]
         self._show_results(results)
         self.current_values = dict(parameters)
         self.current_results = entry.get("results", [])
+        self.current_figure = figure
 
     def show_error(self, message):
         self.status_label.configure(text="")
@@ -216,13 +250,13 @@ class ResultPanel(ctk.CTkFrame):
                 row,
                 text=label,
                 font=ctk.CTkFont(size=14),
-                text_color=TEXT_MUTED,
+                text_color=t("muted"),
             ).pack(side="left")
             ctk.CTkLabel(
                 row,
-                text=f"{value:.2f} {unit}",
+                text=_fmt(value, unit),
                 font=ctk.CTkFont(size=15, weight="bold"),
-                text_color=TEXT,
+                text_color=t("text"),
             ).pack(side="right")
 
     def _clear_results(self):

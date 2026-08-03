@@ -2,25 +2,29 @@ import math
 import tkinter as tk
 
 from figures import (
-    Circle,
-    Rectangle,
-    Trapeze,
-    RegularPolygon,
-    CircularSector,
     Annulus,
+    Circle,
+    CircularSector,
+    Cone,
     Cube,
     Cylinder,
-    Sphere,
-    RectangularPyramid,
-    Cone,
+    Rectangle,
     RectangularPrism,
+    RectangularPyramid,
+    RegularPolygon,
+    Sphere,
+    Trapeze,
 )
 
-ACCENT = "#534AB7"
-EDGE = "#3A3F55"
-INTERIOR = "#E3E7F6"
-CANVAS_BG = "#FFFFFF"
+from ui.theme import LIGHT
+
 MARGIN = 24
+
+_PALETTE = LIGHT
+
+
+def _c(key):
+    return _PALETTE[key]
 
 
 def _val(values, key, default=1.0):
@@ -43,11 +47,27 @@ def _flat(points):
     return [coord for point in points for coord in point]
 
 
+def _accent():
+    return _c("accent")
+
+
+def _edge():
+    return _c("canvas_edge")
+
+
+def _fill():
+    return _c("canvas_fill")
+
+
+def _bg():
+    return _c("canvas_bg")
+
+
 def _draw_circle(c, cx, cy, s, values):
     r = _val(values, "radio") * s
-    c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=ACCENT, width=2, fill=INTERIOR)
-    c.create_line(cx, cy, cx + r, cy, fill=EDGE, dash=(4, 3))
-    c.create_text((cx + cx + r) / 2, cy - 10, text=_lbl(values, "radio"), fill=EDGE)
+    c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=_accent(), width=2, fill=_fill())
+    c.create_line(cx, cy, cx + r, cy, fill=_edge(), dash=(4, 3))
+    c.create_text((cx + cx + r) / 2, cy - 10, text=_lbl(values, "radio"), fill=_edge())
 
 
 def _draw_rectangle(c, cx, cy, s, values):
@@ -55,10 +75,10 @@ def _draw_rectangle(c, cx, cy, s, values):
     h = _val(values, "height") * s
     x0, y0 = cx - b / 2, cy - h / 2
     x1, y1 = cx + b / 2, cy + h / 2
-    c.create_rectangle(x0, y0, x1, y1, outline=ACCENT, width=2, fill=INTERIOR)
-    c.create_line(cx, y0, cx, y1, fill=EDGE, dash=(4, 3))
-    c.create_text(cx, y1 + 12, text=_lbl(values, "base"), fill=EDGE)
-    c.create_text(x1 + 12, cy, text=_lbl(values, "height"), fill=EDGE)
+    c.create_rectangle(x0, y0, x1, y1, outline=_accent(), width=2, fill=_fill())
+    c.create_line(cx, y0, cx, y1, fill=_edge(), dash=(4, 3))
+    c.create_text(cx, y1 + 12, text=_lbl(values, "base"), fill=_edge())
+    c.create_text(x1 + 12, cy, text=_lbl(values, "height"), fill=_edge())
 
 
 def _draw_trapeze(c, cx, cy, s, values):
@@ -72,10 +92,10 @@ def _draw_trapeze(c, cx, cy, s, values):
         (cx + offset, cy - h / 2),
         (cx - offset, cy - h / 2),
     ]
-    c.create_polygon(*_flat(points), outline=ACCENT, width=2, fill=INTERIOR)
-    c.create_text(cx, cy + h / 2 + 12, text=_lbl(values, "base"), fill=EDGE)
-    c.create_text(cx, cy - h / 2 - 12, text=_lbl(values, "base_minior"), fill=EDGE)
-    c.create_text(cx + b_major / 2 + 14, cy, text=_lbl(values, "height"), fill=EDGE)
+    c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
+    c.create_text(cx, cy + h / 2 + 12, text=_lbl(values, "base"), fill=_edge())
+    c.create_text(cx, cy - h / 2 - 12, text=_lbl(values, "base_minior"), fill=_edge())
+    c.create_text(cx + b_major / 2 + 14, cy, text=_lbl(values, "height"), fill=_edge())
 
 
 def _draw_polygon(c, cx, cy, s, values):
@@ -86,30 +106,30 @@ def _draw_polygon(c, cx, cy, s, values):
          cy + radius * math.sin(-math.pi / 2 + 2 * math.pi * i / n))
         for i in range(n)
     ]
-    c.create_polygon(*_flat(points), outline=ACCENT, width=2, fill=INTERIOR)
-    c.create_text(cx, cy + radius + 16, text=f"n={n}, s={_lbl(values, 'side')}", fill=EDGE)
+    c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
+    c.create_text(cx, cy + radius + 16, text=f"n={n}, s={_lbl(values, 'side')}", fill=_edge())
 
 
 def _draw_sector(c, cx, cy, s, values):
     r = _val(values, "radio") * s
     angle = _val(values, "angle", 90)
     c.create_arc(cx - r, cy - r, cx + r, cy + r, start=0, extent=angle,
-                 outline=ACCENT, width=2, fill=INTERIOR, style="pieslice")
+                 outline=_accent(), width=2, fill=_fill(), style="pieslice")
     c.create_line(cx, cy, cx + r * math.cos(math.radians(angle)),
-                  cy - r * math.sin(math.radians(angle)), fill=ACCENT, width=2)
-    c.create_text(cx + r / 2, cy - r / 2 - 8, text=f"θ={_val(values, 'angle'):.0f}°", fill=EDGE)
-    c.create_text(cx + r * 0.7, cy + r * 0.55, text=_lbl(values, "radio"), fill=EDGE)
+                  cy - r * math.sin(math.radians(angle)), fill=_accent(), width=2)
+    c.create_text(cx + r / 2, cy - r / 2 - 8, text=f"θ={_val(values, 'angle'):.0f}°", fill=_edge())
+    c.create_text(cx + r * 0.7, cy + r * 0.55, text=_lbl(values, "radio"), fill=_edge())
 
 
 def _draw_annulus(c, cx, cy, s, values):
     outer = _val(values, "radio") * s
     inner = _val(values, "radio_inner") * s
     c.create_oval(cx - outer, cy - outer, cx + outer, cy + outer,
-                  outline=ACCENT, width=2, fill=INTERIOR)
+                  outline=_accent(), width=2, fill=_fill())
     c.create_oval(cx - inner, cy - inner, cx + inner, cy + inner,
-                  outline=ACCENT, width=2, fill=CANVAS_BG)
-    c.create_text(cx + outer * 0.6, cy - outer * 0.6, text=_lbl(values, "radio"), fill=EDGE)
-    c.create_text(cx + inner * 0.45, cy - inner * 0.45, text=_lbl(values, "radio_inner"), fill=EDGE)
+                  outline=_accent(), width=2, fill=_bg())
+    c.create_text(cx + outer * 0.6, cy - outer * 0.6, text=_lbl(values, "radio"), fill=_edge())
+    c.create_text(cx + inner * 0.45, cy - inner * 0.45, text=_lbl(values, "radio_inner"), fill=_edge())
 
 
 def _draw_cube(c, cx, cy, s, values):
@@ -118,11 +138,11 @@ def _draw_cube(c, cx, cy, s, values):
     front = [(cx - a / 2, cy - a / 2), (cx + a / 2, cy - a / 2),
              (cx + a / 2, cy + a / 2), (cx - a / 2, cy + a / 2)]
     back = [(x + dx, y - dy) for x, y in front]
-    c.create_polygon(*_flat(back), outline=ACCENT, width=2, fill=INTERIOR)
+    c.create_polygon(*_flat(back), outline=_accent(), width=2, fill=_fill())
     for f, b in zip(front, back):
-        c.create_line(f[0], f[1], b[0], b[1], fill=ACCENT, width=2)
-    c.create_polygon(*_flat(front), outline=ACCENT, width=2, fill=CANVAS_BG)
-    c.create_text(cx, cy + a / 2 + 16, text=f"s={_lbl(values, 'sides')}", fill=EDGE)
+        c.create_line(f[0], f[1], b[0], b[1], fill=_accent(), width=2)
+    c.create_polygon(*_flat(front), outline=_accent(), width=2, fill=_bg())
+    c.create_text(cx, cy + a / 2 + 16, text=f"s={_lbl(values, 'sides')}", fill=_edge())
 
 
 def _draw_cylinder(c, cx, cy, s, values):
@@ -131,20 +151,20 @@ def _draw_cylinder(c, cx, cy, s, values):
     ry = r * 0.3
     top_y = cy - h / 2
     bot_y = cy + h / 2
-    c.create_rectangle(cx - r, top_y + ry, cx + r, bot_y, outline=ACCENT, width=2, fill=INTERIOR)
+    c.create_rectangle(cx - r, top_y + ry, cx + r, bot_y, outline=_accent(), width=2, fill=_fill())
     c.create_arc(cx - r, bot_y - 2 * ry, cx + r, bot_y, start=0, extent=180,
-                 outline=ACCENT, width=2, fill=INTERIOR, style="chord")
-    c.create_oval(cx - r, top_y, cx + r, top_y + 2 * ry, outline=ACCENT, width=2, fill=CANVAS_BG)
-    c.create_line(cx, top_y + ry, cx, bot_y, fill=EDGE, dash=(4, 3))
-    c.create_text(cx, bot_y + 16, text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=EDGE)
+                 outline=_accent(), width=2, fill=_fill(), style="chord")
+    c.create_oval(cx - r, top_y, cx + r, top_y + 2 * ry, outline=_accent(), width=2, fill=_bg())
+    c.create_line(cx, top_y + ry, cx, bot_y, fill=_edge(), dash=(4, 3))
+    c.create_text(cx, bot_y + 16, text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=_edge())
 
 
 def _draw_sphere(c, cx, cy, s, values):
     r = _val(values, "radio") * s
-    c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=ACCENT, width=2, fill=INTERIOR)
-    c.create_oval(cx - r, cy - r * 0.55, cx + r, cy + r * 0.55, outline=ACCENT, width=1)
-    c.create_oval(cx - r * 0.55, cy - r, cx + r * 0.55, cy + r, outline=ACCENT, width=1)
-    c.create_text(cx, cy + r + 16, text=f"r={_lbl(values, 'radio')}", fill=EDGE)
+    c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=_accent(), width=2, fill=_fill())
+    c.create_oval(cx - r, cy - r * 0.55, cx + r, cy + r * 0.55, outline=_accent(), width=1)
+    c.create_oval(cx - r * 0.55, cy - r, cx + r * 0.55, cy + r, outline=_accent(), width=1)
+    c.create_text(cx, cy + r + 16, text=f"r={_lbl(values, 'radio')}", fill=_edge())
 
 
 def _draw_rect_pyramid(c, cx, cy, s, values):
@@ -155,13 +175,13 @@ def _draw_rect_pyramid(c, cx, cy, s, values):
     apex = (cx, cy - height / 2)
     base = [(cx - length / 2, cy + height / 2), (cx + length / 2, cy + height / 2),
             (cx + length / 2 + ox, cy + height / 2 - oy), (cx - length / 2 + ox, cy + height / 2 - oy)]
-    c.create_polygon(*_flat(base), outline=ACCENT, width=2, fill=CANVAS_BG)
+    c.create_polygon(*_flat(base), outline=_accent(), width=2, fill=_bg())
     for p in base:
-        c.create_line(apex[0], apex[1], p[0], p[1], fill=ACCENT, width=2)
+        c.create_line(apex[0], apex[1], p[0], p[1], fill=_accent(), width=2)
     c.create_polygon(cx - length / 2, cy + height / 2, cx + length / 2, cy + height / 2,
-                     apex[0], apex[1], outline=ACCENT, width=2, fill=INTERIOR)
+                     apex[0], apex[1], outline=_accent(), width=2, fill=_fill())
     c.create_text(cx, cy + height / 2 + 16,
-                  text=f"l={_lbl(values, 'base')}, w={_lbl(values, 'width')}", fill=EDGE)
+                  text=f"l={_lbl(values, 'base')}, w={_lbl(values, 'width')}", fill=_edge())
 
 
 def _draw_cone(c, cx, cy, s, values):
@@ -170,10 +190,10 @@ def _draw_cone(c, cx, cy, s, values):
     ry = r * 0.3
     top = (cx, cy - h / 2)
     bot = cy + h / 2
-    c.create_polygon(cx - r, bot, cx + r, bot, top[0], top[1], outline=ACCENT, width=2, fill=INTERIOR)
+    c.create_polygon(cx - r, bot, cx + r, bot, top[0], top[1], outline=_accent(), width=2, fill=_fill())
     c.create_arc(cx - r, bot - 2 * ry, cx + r, bot, start=0, extent=180,
-                 outline=ACCENT, width=2, fill=CANVAS_BG, style="chord")
-    c.create_text(cx, bot + 16, text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=EDGE)
+                 outline=_accent(), width=2, fill=_bg(), style="chord")
+    c.create_text(cx, bot + 16, text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=_edge())
 
 
 def _draw_rect_prism(c, cx, cy, s, values):
@@ -184,12 +204,12 @@ def _draw_rect_prism(c, cx, cy, s, values):
     front = [(cx - length / 2, cy - height / 2), (cx + length / 2, cy - height / 2),
              (cx + length / 2, cy + height / 2), (cx - length / 2, cy + height / 2)]
     back = [(x + ox, y - oy) for x, y in front]
-    c.create_polygon(*_flat(back), outline=ACCENT, width=2, fill=INTERIOR)
+    c.create_polygon(*_flat(back), outline=_accent(), width=2, fill=_fill())
     for f, b in zip(front, back):
-        c.create_line(f[0], f[1], b[0], b[1], fill=ACCENT, width=2)
-    c.create_polygon(*_flat(front), outline=ACCENT, width=2, fill=CANVAS_BG)
+        c.create_line(f[0], f[1], b[0], b[1], fill=_accent(), width=2)
+    c.create_polygon(*_flat(front), outline=_accent(), width=2, fill=_bg())
     c.create_text(cx, cy + height / 2 + 16,
-                  text=f"l={_lbl(values, 'length')}, w={_lbl(values, 'width')}", fill=EDGE)
+                  text=f"l={_lbl(values, 'length')}, w={_lbl(values, 'width')}", fill=_edge())
 
 
 _DRAWERS = {
@@ -209,8 +229,8 @@ _DRAWERS = {
 
 _SIZES = {
     Circle: lambda v: (2, 2),
-    Rectangle: lambda v: (1, 1),
-    Trapeze: lambda v: (1, 1),
+    Rectangle: lambda v: (_val(v, "base"), _val(v, "height")),
+    Trapeze: lambda v: (_val(v, "base"), _val(v, "height")),
     RegularPolygon: lambda v: (2, 2),
     CircularSector: lambda v: (2, 2),
     Annulus: lambda v: (2, 2),
@@ -223,7 +243,9 @@ _SIZES = {
 }
 
 
-def draw(canvas, figure, values):
+def draw(canvas, figure, values, palette=None):
+    global _PALETTE
+    _PALETTE = palette or LIGHT
     draw_func = _DRAWERS.get(type(figure))
     if draw_func is None:
         return
