@@ -8,12 +8,18 @@ from figures import (
     Cone,
     Cube,
     Cylinder,
+    Ellipse,
+    Parallelogram,
     Rectangle,
     RectangularPrism,
     RectangularPyramid,
     RegularPolygon,
+    Rhombus,
     Sphere,
+    Tetrahedron,
+    Torus,
     Trapeze,
+    Triangle,
 )
 
 from ui.theme import LIGHT
@@ -212,6 +218,72 @@ def _draw_rect_prism(c, cx, cy, s, values):
                   text=f"l={_lbl(values, 'length')}, w={_lbl(values, 'width')}", fill=_edge())
 
 
+def _draw_triangle(c, cx, cy, s, values):
+    b = _val(values, "base") * s
+    h = _val(values, "height") * s
+    points = [(cx - b / 2, cy + h / 2), (cx + b / 2, cy + h / 2), (cx, cy - h / 2)]
+    c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
+    c.create_line(cx, cy - h / 2, cx, cy + h / 2, fill=_edge(), dash=(4, 3))
+    c.create_text(cx, cy + h / 2 + 12, text=f"b={_lbl(values, 'base')}", fill=_edge())
+    c.create_text(cx + b / 2 + 12, cy, text=f"h={_lbl(values, 'height')}", fill=_edge())
+
+
+def _draw_ellipse(c, cx, cy, s, values):
+    a = _val(values, "semi_major") * s
+    b = _val(values, "semi_minor") * s
+    c.create_oval(cx - a, cy - b, cx + a, cy + b, outline=_accent(), width=2, fill=_fill())
+    c.create_line(cx - a, cy, cx + a, cy, fill=_edge(), dash=(4, 3))
+    c.create_line(cx, cy - b, cx, cy + b, fill=_edge(), dash=(4, 3))
+    c.create_text(cx + a / 2, cy - 10, text=_lbl(values, "semi_major"), fill=_edge())
+    c.create_text(cx + 10, cy - b / 2, text=_lbl(values, "semi_minor"), fill=_edge())
+
+
+def _draw_rhombus(c, cx, cy, s, values):
+    d1 = _val(values, "diag_major") * s
+    d2 = _val(values, "diag_minor") * s
+    points = [(cx, cy - d2 / 2), (cx + d1 / 2, cy), (cx, cy + d2 / 2), (cx - d1 / 2, cy)]
+    c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
+    c.create_line(cx - d1 / 2, cy, cx + d1 / 2, cy, fill=_edge(), dash=(4, 3))
+    c.create_text(cx, cy + d2 / 2 + 14, text=f"D={_lbl(values, 'diag_major')}", fill=_edge())
+    c.create_text(cx + d1 / 2 + 10, cy, text=f"d={_lbl(values, 'diag_minor')}", fill=_edge())
+
+
+def _draw_parallelogram(c, cx, cy, s, values):
+    b = _val(values, "base") * s
+    h = _val(values, "height") * s
+    angle = math.radians(_val(values, "angle", 60))
+    off = h * math.cos(angle) / math.sin(angle)
+    points = [(cx - b / 2 - off, cy - h / 2), (cx + b / 2 - off, cy - h / 2),
+              (cx + b / 2, cy + h / 2), (cx - b / 2, cy + h / 2)]
+    c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
+    c.create_line(cx - b / 2 - off, cy + h / 2, cx - b / 2 - off, cy - h / 2, fill=_edge(), dash=(4, 3))
+    c.create_text(cx, cy + h / 2 + 14,
+                  text=f"b={_lbl(values, 'base')}, θ={_val(values, 'angle'):.0f}°", fill=_edge())
+    c.create_text(cx - b / 2 - off - 12, cy, text=f"h={_lbl(values, 'height')}", fill=_edge())
+
+
+def _draw_torus(c, cx, cy, s, values):
+    outer = _val(values, "major_radius") * s
+    inner = _val(values, "minor_radius") * s
+    c.create_oval(cx - (outer + inner), cy - (outer + inner), cx + (outer + inner), cy + (outer + inner),
+                  outline=_accent(), width=2, fill=_fill())
+    c.create_oval(cx - (outer - inner), cy - (outer - inner), cx + (outer - inner), cy + (outer - inner),
+                  outline=_accent(), width=2, fill=_bg())
+    c.create_text(cx, cy + (outer + inner) + 16,
+                  text=f"R={_lbl(values, 'major_radius')}, r={_lbl(values, 'minor_radius')}", fill=_edge())
+
+
+def _draw_tetrahedron(c, cx, cy, s, values):
+    a = _val(values, "side") * s
+    h = a * math.sqrt(3) / 2
+    base = [(cx - a / 2, cy + h / 2), (cx + a / 2, cy + h / 2), (cx, cy - h / 2)]
+    apex = (cx, cy - h / 2 - a * 0.55)
+    for p in base:
+        c.create_line(apex[0], apex[1], p[0], p[1], fill=_accent(), width=2)
+    c.create_polygon(*_flat(base), outline=_accent(), width=2, fill=_fill())
+    c.create_text(cx, cy + h / 2 + 16, text=f"a={_lbl(values, 'side')}", fill=_edge())
+
+
 _DRAWERS = {
     Circle: _draw_circle,
     Rectangle: _draw_rectangle,
@@ -225,6 +297,12 @@ _DRAWERS = {
     RectangularPyramid: _draw_rect_pyramid,
     Cone: _draw_cone,
     RectangularPrism: _draw_rect_prism,
+    Triangle: _draw_triangle,
+    Ellipse: _draw_ellipse,
+    Rhombus: _draw_rhombus,
+    Parallelogram: _draw_parallelogram,
+    Torus: _draw_torus,
+    Tetrahedron: _draw_tetrahedron,
 }
 
 _SIZES = {
@@ -240,6 +318,12 @@ _SIZES = {
     RectangularPyramid: lambda v: (1.3, 1.4),
     Cone: lambda v: (2, 1.4),
     RectangularPrism: lambda v: (1.3, 1.4),
+    Triangle: lambda v: (_val(v, "base"), _val(v, "height")),
+    Ellipse: lambda v: (2 * _val(v, "semi_major"), 2 * _val(v, "semi_minor")),
+    Rhombus: lambda v: (_val(v, "diag_major"), _val(v, "diag_minor")),
+    Parallelogram: lambda v: (_val(v, "base") + abs(_val(v, "height")), _val(v, "height")),
+    Torus: lambda v: (2, 2),
+    Tetrahedron: lambda v: (_val(v, "side"), _val(v, "side") * 1.4),
 }
 
 
