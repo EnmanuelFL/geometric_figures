@@ -1,0 +1,36 @@
+{
+  "materials": [
+    {"material": "Hormigón HA-25", "compression": 25, "tension": 2.6, "density": 2400},
+    {"material": "Hormigón HA-30", "compression": 30, "tension": 2.9, "density": 2450},
+    {"material": "Acero S275", "compression": 275, "tension": 275, "density": 7850},
+    {"material": "Acero S355", "compression": 355, "tension": 355, "density": 7850},
+    {"material": "Madera de pino", "compression": 11, "tension": 10, "density": 500},
+    {"material": "Madera de roble", "compression": 14, "tension": 13, "density": 750},
+    {"material": "Ladrillo cerámico", "compression": 30, "tension": 2, "density": 1800},
+    {"material": "Adobe", "compression": 2.5, "tension": 0.3, "density": 1600},
+    {"material": "Vidrio", "compression": 300, "tension": 30, "density": 2500}
+  ],
+  "heights": [
+    {"use": "Residencial", "min": "2.50 m"},
+    {"use": "Oficinas", "min": "2.50 m"},
+    {"use": "Garaje", "min": "2.20 m"},
+    {"use": "Comercial", "min": "3.00 m"}
+  ],
+  "widths": [
+    {"item": "Pasillo", "min": "1.00 m"},
+    {"item": "Puerta", "min": "0.80 m"},
+    {"item": "Escalera", "min": "1.00 m"}
+  ],
+  "parking": [
+    {"type": "Estándar", "dimensions": "2.40 x 4.80 m"},
+    {"type": "Discapacitados", "dimensions": "3.60 x 5.00 m"},
+    {"type": "Motocicleta", "dimensions": "1.20 x 2.40 m"}
+  ],
+  "weights": [
+    {"element": "Forjado de hormigón", "weight": "450 kg/m²"},
+    {"element": "Tabique cerámico", "weight": "120 kg/m²"},
+    {"element": "Solado", "weight": "80 kg/m²"},
+    {"element": "Fachada", "weight": "250 kg/m²"},
+    {"element": "Cubierta", "weight": "150 kg/m²"}
+  ]
+}
