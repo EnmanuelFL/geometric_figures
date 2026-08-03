@@ -282,6 +282,11 @@ class Annulus(Figures2D):
     def calculate_perimeter(self):
         self.perimeter = 2 * math.pi * (self.radio + self.radio_inner)
 
+    def validate(self):
+        if self.radio_inner >= self.radio:
+            return "Inner radius must be smaller than outer radius."
+        return None
+
     def show_result(self):
         self.calculate_area()
         self.calculate_perimeter()
