@@ -50,6 +50,10 @@ def _lbl(values, key, suffix="cm"):
     return f"{_val(values, key):.1f} {suffix}".strip()
 
 
+def _label_offset(dim):
+    return max(14, dim * 0.06)
+
+
 def _flat(points):
     return [coord for point in points for coord in point]
 
@@ -80,7 +84,7 @@ def _draw_circle(c, cx, cy, s, values):
     r = _val(values, "radio") * s
     c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=_accent(), width=2, fill=_fill())
     c.create_line(cx, cy, cx + r, cy, fill=_edge(), dash=(4, 3))
-    c.create_text((cx + cx + r) / 2, cy - 10, text=_lbl(values, "radio"), fill=_edge())
+    c.create_text(cx + r + _label_offset(r), cy, text=_lbl(values, "radio"), fill=_edge(), anchor="w")
 
 
 def _draw_rectangle(c, cx, cy, s, values):
@@ -90,8 +94,8 @@ def _draw_rectangle(c, cx, cy, s, values):
     x1, y1 = cx + b / 2, cy + h / 2
     c.create_rectangle(x0, y0, x1, y1, outline=_accent(), width=2, fill=_fill())
     c.create_line(cx, y0, cx, y1, fill=_edge(), dash=(4, 3))
-    c.create_text(cx, y1 + 12, text=_lbl(values, "base"), fill=_edge())
-    c.create_text(x1 + 12, cy, text=_lbl(values, "height"), fill=_edge())
+    c.create_text(cx, y1 + _label_offset(h), text=_lbl(values, "base"), fill=_edge())
+    c.create_text(x1 + _label_offset(b), cy, text=_lbl(values, "height"), fill=_edge(), anchor="w")
 
 
 def _draw_trapeze(c, cx, cy, s, values):
@@ -106,9 +110,9 @@ def _draw_trapeze(c, cx, cy, s, values):
         (cx - offset, cy - h / 2),
     ]
     c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
-    c.create_text(cx, cy + h / 2 + 12, text=_lbl(values, "base"), fill=_edge())
-    c.create_text(cx, cy - h / 2 - 12, text=_lbl(values, "base_minior"), fill=_edge())
-    c.create_text(cx + b_major / 2 + 14, cy, text=_lbl(values, "height"), fill=_edge())
+    c.create_text(cx, cy + h / 2 + _label_offset(h), text=_lbl(values, "base"), fill=_edge())
+    c.create_text(cx, cy - h / 2 - _label_offset(h), text=_lbl(values, "base_minior"), fill=_edge())
+    c.create_text(cx + b_major / 2 + _label_offset(b_major), cy, text=_lbl(values, "height"), fill=_edge(), anchor="w")
 
 
 def _draw_polygon(c, cx, cy, s, values):
@@ -120,7 +124,7 @@ def _draw_polygon(c, cx, cy, s, values):
         for i in range(n)
     ]
     c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
-    c.create_text(cx, cy + radius + 16, text=f"n={n}, s={_lbl(values, 'side')}", fill=_edge())
+    c.create_text(cx, cy + radius + _label_offset(radius), text=f"n={n}, s={_lbl(values, 'side')}", fill=_edge())
 
 
 def _draw_sector(c, cx, cy, s, values):
@@ -130,8 +134,10 @@ def _draw_sector(c, cx, cy, s, values):
                  outline=_accent(), width=2, fill=_fill(), style="pieslice")
     c.create_line(cx, cy, cx + r * math.cos(math.radians(angle)),
                   cy - r * math.sin(math.radians(angle)), fill=_accent(), width=2)
-    c.create_text(cx + r / 2, cy - r / 2 - 8, text=f"θ={_val(values, 'angle'):.0f}°", fill=_edge())
-    c.create_text(cx + r * 0.7, cy + r * 0.55, text=_lbl(values, "radio"), fill=_edge())
+    c.create_text(cx + r * math.cos(math.radians(angle / 2)) * 0.7,
+                  cy - r * math.sin(math.radians(angle / 2)) * 0.7,
+                  text=f"θ={_val(values, 'angle'):.0f}°", fill=_edge())
+    c.create_text(cx + r + _label_offset(r), cy, text=_lbl(values, "radio"), fill=_edge(), anchor="w")
 
 
 def _draw_annulus(c, cx, cy, s, values):
@@ -141,8 +147,8 @@ def _draw_annulus(c, cx, cy, s, values):
                   outline=_accent(), width=2, fill=_fill())
     c.create_oval(cx - inner, cy - inner, cx + inner, cy + inner,
                   outline=_accent(), width=2, fill=_bg())
-    c.create_text(cx + outer * 0.6, cy - outer * 0.6, text=_lbl(values, "radio"), fill=_edge())
-    c.create_text(cx + inner * 0.45, cy - inner * 0.45, text=_lbl(values, "radio_inner"), fill=_edge())
+    c.create_text(cx + outer + _label_offset(outer), cy, text=_lbl(values, "radio"), fill=_edge(), anchor="w")
+    c.create_text(cx, cy + outer + _label_offset(outer), text=_lbl(values, "radio_inner"), fill=_edge())
 
 
 def _draw_cube(c, cx, cy, s, values):
@@ -155,7 +161,7 @@ def _draw_cube(c, cx, cy, s, values):
     for f, b in zip(front, back):
         c.create_line(f[0], f[1], b[0], b[1], fill=_accent(), width=2)
     c.create_polygon(*_flat(front), outline=_accent(), width=2, fill=_bg())
-    c.create_text(cx, cy + a / 2 + 16, text=f"s={_lbl(values, 'sides')}", fill=_edge())
+    c.create_text(cx, cy + a / 2 + _label_offset(a), text=f"s={_lbl(values, 'sides')}", fill=_edge())
 
 
 def _draw_cylinder(c, cx, cy, s, values):
@@ -169,7 +175,7 @@ def _draw_cylinder(c, cx, cy, s, values):
                  outline=_accent(), width=2, fill=_fill(), style="chord")
     c.create_oval(cx - r, top_y, cx + r, top_y + 2 * ry, outline=_accent(), width=2, fill=_bg())
     c.create_line(cx, top_y + ry, cx, bot_y, fill=_edge(), dash=(4, 3))
-    c.create_text(cx, bot_y + 16, text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=_edge())
+    c.create_text(cx, bot_y + _label_offset(h), text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=_edge())
 
 
 def _draw_sphere(c, cx, cy, s, values):
@@ -177,7 +183,7 @@ def _draw_sphere(c, cx, cy, s, values):
     c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=_accent(), width=2, fill=_fill())
     c.create_oval(cx - r, cy - r * 0.55, cx + r, cy + r * 0.55, outline=_accent(), width=1)
     c.create_oval(cx - r * 0.55, cy - r, cx + r * 0.55, cy + r, outline=_accent(), width=1)
-    c.create_text(cx, cy + r + 16, text=f"r={_lbl(values, 'radio')}", fill=_edge())
+    c.create_text(cx + r + _label_offset(r), cy, text=f"r={_lbl(values, 'radio')}", fill=_edge(), anchor="w")
 
 
 def _draw_rect_pyramid(c, cx, cy, s, values):
@@ -193,7 +199,7 @@ def _draw_rect_pyramid(c, cx, cy, s, values):
         c.create_line(apex[0], apex[1], p[0], p[1], fill=_accent(), width=2)
     c.create_polygon(cx - length / 2, cy + height / 2, cx + length / 2, cy + height / 2,
                      apex[0], apex[1], outline=_accent(), width=2, fill=_fill())
-    c.create_text(cx, cy + height / 2 + 16,
+    c.create_text(cx, cy + height / 2 + _label_offset(height),
                   text=f"l={_lbl(values, 'base')}, w={_lbl(values, 'width')}", fill=_edge())
 
 
@@ -206,7 +212,7 @@ def _draw_cone(c, cx, cy, s, values):
     c.create_polygon(cx - r, bot, cx + r, bot, top[0], top[1], outline=_accent(), width=2, fill=_fill())
     c.create_arc(cx - r, bot - 2 * ry, cx + r, bot, start=0, extent=180,
                  outline=_accent(), width=2, fill=_bg(), style="chord")
-    c.create_text(cx, bot + 16, text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=_edge())
+    c.create_text(cx, bot + _label_offset(h), text=f"r={_lbl(values, 'radio')}, h={_lbl(values, 'height')}", fill=_edge())
 
 
 def _draw_rect_prism(c, cx, cy, s, values):
@@ -221,7 +227,7 @@ def _draw_rect_prism(c, cx, cy, s, values):
     for f, b in zip(front, back):
         c.create_line(f[0], f[1], b[0], b[1], fill=_accent(), width=2)
     c.create_polygon(*_flat(front), outline=_accent(), width=2, fill=_bg())
-    c.create_text(cx, cy + height / 2 + 16,
+    c.create_text(cx, cy + height / 2 + _label_offset(height),
                   text=f"l={_lbl(values, 'length')}, w={_lbl(values, 'width')}", fill=_edge())
 
 
@@ -231,8 +237,8 @@ def _draw_triangle(c, cx, cy, s, values):
     points = [(cx - b / 2, cy + h / 2), (cx + b / 2, cy + h / 2), (cx, cy - h / 2)]
     c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
     c.create_line(cx, cy - h / 2, cx, cy + h / 2, fill=_edge(), dash=(4, 3))
-    c.create_text(cx, cy + h / 2 + 12, text=f"b={_lbl(values, 'base')}", fill=_edge())
-    c.create_text(cx + b / 2 + 12, cy, text=f"h={_lbl(values, 'height')}", fill=_edge())
+    c.create_text(cx, cy + h / 2 + _label_offset(h), text=f"b={_lbl(values, 'base')}", fill=_edge())
+    c.create_text(cx + b / 2 + _label_offset(b), cy, text=f"h={_lbl(values, 'height')}", fill=_edge(), anchor="w")
 
 
 def _draw_ellipse(c, cx, cy, s, values):
@@ -241,8 +247,8 @@ def _draw_ellipse(c, cx, cy, s, values):
     c.create_oval(cx - a, cy - b, cx + a, cy + b, outline=_accent(), width=2, fill=_fill())
     c.create_line(cx - a, cy, cx + a, cy, fill=_edge(), dash=(4, 3))
     c.create_line(cx, cy - b, cx, cy + b, fill=_edge(), dash=(4, 3))
-    c.create_text(cx + a / 2, cy - 10, text=_lbl(values, "semi_major"), fill=_edge())
-    c.create_text(cx + 10, cy - b / 2, text=_lbl(values, "semi_minor"), fill=_edge())
+    c.create_text(cx + a + _label_offset(a), cy, text=_lbl(values, "semi_major"), fill=_edge(), anchor="w")
+    c.create_text(cx, cy - b - _label_offset(b), text=_lbl(values, "semi_minor"), fill=_edge())
 
 
 def _draw_rhombus(c, cx, cy, s, values):
@@ -251,8 +257,8 @@ def _draw_rhombus(c, cx, cy, s, values):
     points = [(cx, cy - d2 / 2), (cx + d1 / 2, cy), (cx, cy + d2 / 2), (cx - d1 / 2, cy)]
     c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
     c.create_line(cx - d1 / 2, cy, cx + d1 / 2, cy, fill=_edge(), dash=(4, 3))
-    c.create_text(cx, cy + d2 / 2 + 14, text=f"D={_lbl(values, 'diag_major')}", fill=_edge())
-    c.create_text(cx + d1 / 2 + 10, cy, text=f"d={_lbl(values, 'diag_minor')}", fill=_edge())
+    c.create_text(cx, cy + d2 / 2 + _label_offset(d2), text=f"D={_lbl(values, 'diag_major')}", fill=_edge())
+    c.create_text(cx + d1 / 2 + _label_offset(d1), cy, text=f"d={_lbl(values, 'diag_minor')}", fill=_edge(), anchor="w")
 
 
 def _draw_parallelogram(c, cx, cy, s, values):
@@ -264,9 +270,9 @@ def _draw_parallelogram(c, cx, cy, s, values):
               (cx + b / 2, cy + h / 2), (cx - b / 2, cy + h / 2)]
     c.create_polygon(*_flat(points), outline=_accent(), width=2, fill=_fill())
     c.create_line(cx - b / 2 - off, cy + h / 2, cx - b / 2 - off, cy - h / 2, fill=_edge(), dash=(4, 3))
-    c.create_text(cx, cy + h / 2 + 14,
+    c.create_text(cx, cy + h / 2 + _label_offset(h),
                   text=f"b={_lbl(values, 'base')}, θ={_val(values, 'angle'):.0f}°", fill=_edge())
-    c.create_text(cx - b / 2 - off - 12, cy, text=f"h={_lbl(values, 'height')}", fill=_edge())
+    c.create_text(cx - b / 2 - off - _label_offset(b), cy, text=f"h={_lbl(values, 'height')}", fill=_edge(), anchor="e")
 
 
 def _draw_torus(c, cx, cy, s, values):
@@ -276,8 +282,8 @@ def _draw_torus(c, cx, cy, s, values):
                   outline=_accent(), width=2, fill=_fill())
     c.create_oval(cx - (outer - inner), cy - (outer - inner), cx + (outer - inner), cy + (outer - inner),
                   outline=_accent(), width=2, fill=_bg())
-    c.create_text(cx, cy + (outer + inner) + 16,
-                  text=f"R={_lbl(values, 'major_radius')}, r={_lbl(values, 'minor_radius')}", fill=_edge())
+    c.create_text(cx + (outer + inner) + _label_offset(outer + inner), cy,
+                  text=f"R={_lbl(values, 'major_radius')}, r={_lbl(values, 'minor_radius')}", fill=_edge(), anchor="w")
 
 
 def _draw_tetrahedron(c, cx, cy, s, values):
@@ -288,7 +294,7 @@ def _draw_tetrahedron(c, cx, cy, s, values):
     for p in base:
         c.create_line(apex[0], apex[1], p[0], p[1], fill=_accent(), width=2)
     c.create_polygon(*_flat(base), outline=_accent(), width=2, fill=_fill())
-    c.create_text(cx, cy + h / 2 + 16, text=f"a={_lbl(values, 'side')}", fill=_edge())
+    c.create_text(cx, cy + h / 2 + _label_offset(h), text=f"a={_lbl(values, 'side')}", fill=_edge())
 
 
 _DRAWERS = {
@@ -334,6 +340,9 @@ _SIZES = {
 }
 
 
+MIN_VISIBLE_PX = 160
+
+
 def draw(canvas, figure, values, palette=None):
     global _PALETTE
     _PALETTE = palette or LIGHT
@@ -344,6 +353,26 @@ def draw(canvas, figure, values, palette=None):
     cw = max(canvas.winfo_width(), 320)
     ch = max(canvas.winfo_height(), 220)
     nw, nh = _SIZES.get(type(figure), lambda v: (1, 1))(values)
-    scale = min((cw - 2 * MARGIN - 2 * LABEL_SPACE) / nw,
-                (ch - 2 * MARGIN - LABEL_SPACE) / nh, 60)
-    draw_func(canvas, cw / 2, ch / 2, max(scale, 1.0), values)
+    fit_scale = min((cw - 2 * MARGIN - 2 * LABEL_SPACE) / nw,
+                    (ch - 2 * MARGIN - LABEL_SPACE) / nh)
+    legible_scale = max(MIN_VISIBLE_PX / max(nw, nh), 1.0)
+    scale = max(fit_scale, legible_scale)
+    content_w = max(cw, nw * scale + 2 * MARGIN + 2 * LABEL_SPACE)
+    content_h = max(ch, nh * scale + 2 * MARGIN + LABEL_SPACE)
+    draw_func(canvas, content_w / 2, content_h / 2, scale, values)
+    bbox = canvas.bbox("all")
+    if bbox:
+        x0, y0, x1, y1 = bbox
+        pad = MARGIN
+        region_w = max(content_w, x1 - x0 + 2 * pad)
+        region_h = max(content_h, y1 - y0 + 2 * pad)
+        content_w, content_h = region_w, region_h
+    canvas.configure(scrollregion=(0, 0, content_w, content_h))
+    if content_w > cw:
+        canvas.xview_moveto((content_w - cw) / 2 / content_w)
+    else:
+        canvas.xview_moveto(0)
+    if content_h > ch:
+        canvas.yview_moveto((content_h - ch) / 2 / content_h)
+    else:
+        canvas.yview_moveto(0)

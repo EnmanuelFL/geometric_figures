@@ -57,15 +57,35 @@ class ResultPanel(ctk.CTkFrame):
 
         self.canvas_box = ctk.CTkFrame(self, fg_color=t("canvas_bg"), corner_radius=10)
         self.canvas_box.pack(fill="x", padx=20, pady=(0, 12))
+
         self.canvas = tk.Canvas(
             self.canvas_box,
-            width=640,
-            height=240,
+            width=620,
+            height=230,
             bg=t("canvas_bg"),
             highlightthickness=1,
             highlightbackground=t("border"),
+            xscrollcommand=self._on_canvas_xscroll,
+            yscrollcommand=self._on_canvas_yscroll,
         )
-        self.canvas.pack(padx=6, pady=6)
+        self.canvas.grid(row=0, column=0, sticky="nsew", padx=(6, 0), pady=(6, 0))
+
+        self.vscroll = ctk.CTkScrollbar(
+            self.canvas_box,
+            orientation="vertical",
+            command=self.canvas.yview,
+        )
+        self.vscroll.grid(row=0, column=1, sticky="ns", padx=(0, 6), pady=(6, 0))
+
+        self.hscroll = ctk.CTkScrollbar(
+            self.canvas_box,
+            orientation="horizontal",
+            command=self.canvas.xview,
+        )
+        self.hscroll.grid(row=1, column=0, columnspan=2, sticky="ew", padx=(6, 6), pady=(0, 6))
+
+        self.canvas_box.grid_columnconfigure(0, weight=1)
+        self.canvas_box.grid_rowconfigure(0, weight=1)
 
         self.form = ctk.CTkFrame(self, fg_color="transparent")
         self.form.pack(fill="x", padx=20, pady=(0, 12))
@@ -116,6 +136,8 @@ class ResultPanel(ctk.CTkFrame):
         self.formula_label.configure(text_color=t("accent"), fg_color=t("accent_soft"))
         self.canvas_box.configure(fg_color=t("canvas_bg"))
         self.canvas.configure(bg=t("canvas_bg"), highlightbackground=t("border"))
+        self.vscroll.configure(fg_color=t("canvas_bg"), button_color=t("border"), button_hover_color=t("accent"))
+        self.hscroll.configure(fg_color=t("canvas_bg"), button_color=t("border"), button_hover_color=t("accent"))
         self.calc_button.configure(fg_color=t("accent"), hover_color=t("accent_hover"))
         self.error_label.configure(text_color=t("error"))
         self.status_label.configure(text_color=t("success"))
@@ -220,7 +242,6 @@ class ResultPanel(ctk.CTkFrame):
             self.canvas.delete("all")
             return
         self.live_values = values
-        figure.set_values(values)
         draw(self.canvas, figure, values, theme.palette)
 
     def _calculate(self):
@@ -263,6 +284,14 @@ class ResultPanel(ctk.CTkFrame):
         self.current_values = dict(parameters)
         self.current_results = entry.get("results", [])
         self.current_figure = figure
+
+    def _on_canvas_xscroll(self, *args):
+        if hasattr(self, "hscroll"):
+            self.hscroll.set(*args)
+
+    def _on_canvas_yscroll(self, *args):
+        if hasattr(self, "vscroll"):
+            self.vscroll.set(*args)
 
     def show_error(self, message):
         self.status_label.configure(text="")

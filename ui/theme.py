@@ -1,22 +1,22 @@
 import customtkinter as ctk
 
 LIGHT = {
-    "bg": "#F5F5F5",
+    "bg": "#ECECEF",
     "panel": "#FFFFFF",
-    "section_bg": "#FAFAFA",
-    "text": "#1A1A1A",
-    "muted": "#6B7280",
-    "border": "#E0E0E0",
-    "accent": "#534AB7",
-    "accent_hover": "#453E9E",
-    "accent_soft": "#E3E7F6",
+    "section_bg": "#E7E7EB",
+    "text": "#111111",
+    "muted": "#4B5563",
+    "border": "#B9BEC9",
+    "accent": "#4A42A8",
+    "accent_hover": "#3B3590",
+    "accent_soft": "#D9DEF3",
     "canvas_bg": "#FFFFFF",
-    "canvas_edge": "#3A3F55",
-    "canvas_fill": "#E3E7F6",
+    "canvas_edge": "#2A2F45",
+    "canvas_fill": "#DCE1F5",
     "entry_bg": "#FFFFFF",
-    "error": "#C0392B",
-    "error_soft": "#F8E1E4",
-    "success": "#2E7D6B",
+    "error": "#B3261E",
+    "error_soft": "#F6D8DC",
+    "success": "#1F6B5A",
 }
 
 DARK = {
