@@ -25,12 +25,13 @@ def _save(entries):
         json.dump(entries[:MAX_ENTRIES], f, ensure_ascii=False, indent=2)
 
 
-def add_entry(figure, parameters, results):
+def add_entry(figure, parameters, results, module="figures"):
     entry = {
         "id": str(uuid.uuid4())[:8],
         "figure": figure,
         "parameters": parameters,
         "results": results,
+        "module": module,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
     entries = load_history()
