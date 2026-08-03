@@ -24,6 +24,9 @@ class SidebarPanel(ctk.CTkFrame):
         self.on_section_change = on_section_change
         self.figure_buttons = {}
         self.selected_cls = None
+        self._tools = []
+        self._references = []
+        self._history_entries = []
 
         self.nav = ctk.CTkSegmentedButton(
             self,
@@ -85,6 +88,12 @@ class SidebarPanel(ctk.CTkFrame):
             scrollable.configure(fg_color="transparent")
         if self.figure_buttons:
             self.set_figures(self.figures_2d, self.figures_3d)
+        if self._tools:
+            self.set_tools(self._tools)
+        if self._references:
+            self.set_references(self._references)
+        if self._history_entries is not None:
+            self.update_history(self._history_entries)
         if self.selected_cls:
             self._select(self.selected_cls)
 
@@ -146,6 +155,7 @@ class SidebarPanel(ctk.CTkFrame):
         self.figures_view.grid_columnconfigure(1, weight=1)
 
     def set_tools(self, tools):
+        self._tools = list(tools)
         for widget in self.tools_view.winfo_children():
             widget.destroy()
         for key, label in tools:
@@ -163,6 +173,7 @@ class SidebarPanel(ctk.CTkFrame):
             button.pack(fill="x", padx=6, pady=3)
 
     def set_references(self, references):
+        self._references = list(references)
         for widget in self.reference_view.winfo_children():
             widget.destroy()
         for key, label in references:
@@ -197,6 +208,7 @@ class SidebarPanel(ctk.CTkFrame):
         self.on_reference_select(key)
 
     def update_history(self, entries):
+        self._history_entries = list(entries)
         for widget in self.history_scroll.winfo_children():
             widget.destroy()
         if not entries:

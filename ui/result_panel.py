@@ -21,6 +21,7 @@ class ResultPanel(ctk.CTkFrame):
         self.current_values = None
         self.current_results = None
         self.current_figure = None
+        self.live_values = None
 
         self.title_label = ctk.CTkLabel(
             self,
@@ -30,7 +31,6 @@ class ResultPanel(ctk.CTkFrame):
             anchor="w",
         )
         self.title_label.pack(fill="x", padx=20, pady=(18, 2))
-
         self.desc_label = ctk.CTkLabel(
             self,
             text="",
@@ -126,6 +126,10 @@ class ResultPanel(ctk.CTkFrame):
                 child.configure(text_color=t("text"))
         if self.current_figure is not None and self.current_values is not None:
             draw(self.canvas, self.current_figure, self.current_values, theme.palette)
+        elif self.figure_class is not None and self.live_values:
+            figure = self.figure_class()
+            figure.set_values(self.live_values)
+            draw(self.canvas, figure, self.live_values, theme.palette)
         if self.current_results is not None:
             self._show_results(self.current_results)
 
@@ -134,6 +138,7 @@ class ResultPanel(ctk.CTkFrame):
         self.current_values = None
         self.current_results = None
         self.current_figure = None
+        self.live_values = None
         self.error_label.configure(text="")
         self.status_label.configure(text="")
         self.canvas.delete("all")
@@ -171,6 +176,7 @@ class ResultPanel(ctk.CTkFrame):
                 text_color=t("text"),
             )
             entry.grid(row=index, column=1, sticky="ew", pady=4)
+            entry.bind("<KeyRelease>", lambda e: self._live_draw())
             self.entries[param["name"]] = entry
         self.form.grid_columnconfigure(1, weight=1)
 
@@ -195,6 +201,28 @@ class ResultPanel(ctk.CTkFrame):
             values[name] = value
         return values, None
 
+    def _live_draw(self):
+        if self.figure_class is None:
+            return
+        figure = self.figure_class()
+        values = {}
+        for param in figure.get_parameters():
+            name = param["name"]
+            raw = self.entries[name].get().strip()
+            try:
+                value = float(raw)
+            except (ValueError, AttributeError):
+                continue
+            if value > 0:
+                values[name] = value
+        if not values:
+            self.live_values = None
+            self.canvas.delete("all")
+            return
+        self.live_values = values
+        figure.set_values(values)
+        draw(self.canvas, figure, values, theme.palette)
+
     def _calculate(self):
         values, error = self._parse_values()
         if error:
@@ -216,6 +244,7 @@ class ResultPanel(ctk.CTkFrame):
         self.current_values = {k: v for k, v in values.items()}
         self.current_results = [[label, value, unit] for label, value, unit in results]
         self.current_figure = figure
+        self.live_values = None
         self.status_label.configure(text="Guardado en el historial.")
         self.on_calculate(figure, self.current_values, self.current_results)
 
