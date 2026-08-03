@@ -38,6 +38,9 @@ class Figure(ABC):
     def get_values(self):
         return {param["name"]: getattr(self, param["name"]) for param in self.PARAMETERS}
 
+    def validate(self):
+        return None
+
 
 class Figures2D(Figure):
     @abstractmethod
@@ -482,3 +485,181 @@ class RectangularPrism(Figures3D):
         self.calculate_volume()
         self.calculate_surface_area()
         print(f'The volume of the rectangular prism is: {self.volume:.2f}\nThe surface area is: {self.surface_area:.2f}')
+
+
+class Triangle(Figures2D):
+    name = "Triangle"
+    PARAMETERS = [
+        {"name": "base", "label": "Base", "unit": "cm"},
+        {"name": "height", "label": "Height", "unit": "cm"},
+        {"name": "lado1", "label": "Side a", "unit": "cm"},
+        {"name": "lado2", "label": "Side b", "unit": "cm"},
+        {"name": "lado3", "label": "Side c", "unit": "cm"},
+    ]
+    DESCRIPTION = "Three-sided 2D shape; sides equal (equilateral), two equal (isosceles) or all different (scalene)."
+    FORMULA = "A = b·h / 2   |   P = a + b + c"
+
+    def __init__(self):
+        self.base = None
+        self.height = None
+        self.lado1 = None
+        self.lado2 = None
+        self.lado3 = None
+
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.base = float(input('enter the base: '))
+        self.height = float(input('enter the height: '))
+        self.lado1 = float(input('enter side a: '))
+        self.lado2 = float(input('enter side b: '))
+        self.lado3 = float(input('enter side c: '))
+
+    def calculate_area(self):
+        self.area = self.base * self.height / 2
+
+    def calculate_perimeter(self):
+        self.perimeter = self.lado1 + self.lado2 + self.lado3
+
+    def _triangle_type(self):
+        a, b, c = self.lado1, self.lado2, self.lado3
+        if a == b == c:
+            return "Equilateral"
+        if a == b or b == c or a == c:
+            return "Isosceles"
+        return "Scalene"
+
+    def validate(self):
+        sides = sorted([self.lado1, self.lado2, self.lado3])
+        if sides[0] + sides[1] <= sides[2]:
+            return "These side lengths do not form a valid triangle."
+        return None
+
+    def _extra_results(self):
+        return [("Type", self._triangle_type(), "")]
+
+    def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
+        print(f'The area of the triangle is: {self.area:.2f}\nThe perimeter is: {self.perimeter:.2f}\nType: {self._triangle_type()}')
+
+
+class Ellipse(Figures2D):
+    name = "Ellipse"
+    PARAMETERS = [
+        {"name": "semi_major", "label": "Semi-major axis (a)", "unit": "cm"},
+        {"name": "semi_minor", "label": "Semi-minor axis (b)", "unit": "cm"},
+    ]
+    DESCRIPTION = "Oval 2D shape defined by two perpendicular axes."
+    FORMULA = "A = π·a·b   |   P ≈ π(a+b)·(1 + 3h/(10+√(4−3h))), h = ((a−b)/(a+b))²"
+
+    def __init__(self):
+        self.semi_major = None
+        self.semi_minor = None
+
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.semi_major = float(input('enter the semi-major axis: '))
+        self.semi_minor = float(input('enter the semi-minor axis: '))
+
+    def calculate_area(self):
+        self.area = math.pi * self.semi_major * self.semi_minor
+
+    def calculate_perimeter(self):
+        h = ((self.semi_major - self.semi_minor) / (self.semi_major + self.semi_minor)) ** 2
+        self.perimeter = math.pi * (self.semi_major + self.semi_minor) * (
+            1 + (3 * h) / (10 + math.sqrt(4 - 3 * h))
+        )
+
+    def validate(self):
+        if self.semi_major < self.semi_minor:
+            return "Semi-major axis (a) must be greater than or equal to semi-minor axis (b)."
+        return None
+
+    def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
+        print(f'The area of the ellipse is: {self.area:.2f}\nThe perimeter is: {self.perimeter:.2f}')
+
+
+class Rhombus(Figures2D):
+    name = "Rhombus"
+    PARAMETERS = [
+        {"name": "diag_major", "label": "Major diagonal (D)", "unit": "cm"},
+        {"name": "diag_minor", "label": "Minor diagonal (d)", "unit": "cm"},
+    ]
+    DESCRIPTION = "Four equal sides; diagonals cross at right angles."
+    FORMULA = "A = D·d / 2   |   side = √((D/2)² + (d/2)²)   |   P = 4·side"
+
+    def __init__(self):
+        self.diag_major = None
+        self.diag_minor = None
+
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.diag_major = float(input('enter the major diagonal: '))
+        self.diag_minor = float(input('enter the minor diagonal: '))
+
+    def calculate_area(self):
+        self.area = self.diag_major * self.diag_minor / 2
+
+    def calculate_perimeter(self):
+        self.side = math.sqrt((self.diag_major / 2) ** 2 + (self.diag_minor / 2) ** 2)
+        self.perimeter = 4 * self.side
+
+    def _extra_results(self):
+        return [("Side", self.side, "cm")]
+
+    def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
+        print(f'The area of the rhombus is: {self.area:.2f}\nThe side is: {self.side:.2f}\nThe perimeter is: {self.perimeter:.2f}')
+
+
+class Parallelogram(Figures2D):
+    name = "Parallelogram"
+    PARAMETERS = [
+        {"name": "base", "label": "Base", "unit": "cm"},
+        {"name": "height", "label": "Height", "unit": "cm"},
+        {"name": "angle", "label": "Angle", "unit": "°"},
+    ]
+    DESCRIPTION = "Four-sided shape with two pairs of parallel sides."
+    FORMULA = "A = b·h   |   P = 2·b + 2·h / sin(θ)"
+
+    def __init__(self):
+        self.base = None
+        self.height = None
+        self.angle = None
+
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.base = float(input('enter the base: '))
+        self.height = float(input('enter the height: '))
+        self.angle = float(input('enter the angle in degrees: '))
+
+    def calculate_area(self):
+        self.area = self.base * self.height
+
+    def calculate_perimeter(self):
+        self.side = self.height / math.sin(math.radians(self.angle))
+        self.perimeter = 2 * self.base + 2 * self.side
+
+    def validate(self):
+        if self.angle >= 180:
+            return "Angle must be between 0 and 180 degrees."
+        return None
+
+    def _extra_results(self):
+        return [("Side", self.side, "cm")]
+
+    def show_result(self):
+        self.calculate_area()
+        self.calculate_perimeter()
+        print(f'The area of the parallelogram is: {self.area:.2f}\nThe side is: {self.side:.2f}\nThe perimeter is: {self.perimeter:.2f}')
