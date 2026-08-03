@@ -1,12 +1,14 @@
-ACCENT = "#534AB7"
-ACCENT_HOVER = "#453E9E"
-ACCENT_SOFT = "#E3E7F6"
-BG = "#F4F6FB"
-PANEL = "#FFFFFF"
-TEXT = "#2E3440"
-TEXT_MUTED = "#8A90A8"
-BORDER = "#E1E6F0"
-ERROR = "#C0392B"
-ERROR_SOFT = "#F8E1E4"
-SUCCESS = "#2E7D6B"
-CANVAS_BG = "#FFFFFF"
+from ui.theme import DARK, LIGHT, theme, t
+
+ACCENT = LIGHT["accent"]
+ACCENT_HOVER = LIGHT["accent_hover"]
+ACCENT_SOFT = LIGHT["accent_soft"]
+BG = LIGHT["bg"]
+PANEL = LIGHT["panel"]
+TEXT = LIGHT["text"]
+TEXT_MUTED = LIGHT["muted"]
+BORDER = LIGHT["border"]
+ERROR = LIGHT["error"]
+ERROR_SOFT = LIGHT["error_soft"]
+SUCCESS = LIGHT["success"]
+CANVAS_BG = LIGHT["canvas_bg"]
