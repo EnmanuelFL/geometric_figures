@@ -53,6 +53,12 @@ def _flat(points):
     return [coord for point in points for coord in point]
 
 
+def _polygon_extent(v):
+    n = _num(v, "sides", 6)
+    radius = _val(v, "side") / (2 * math.sin(math.pi / n))
+    return (2 * radius, 2 * radius)
+
+
 def _accent():
     return _c("accent")
 
@@ -306,23 +312,23 @@ _DRAWERS = {
 }
 
 _SIZES = {
-    Circle: lambda v: (2, 2),
+    Circle: lambda v: (2 * _val(v, "radio"), 2 * _val(v, "radio")),
     Rectangle: lambda v: (_val(v, "base"), _val(v, "height")),
     Trapeze: lambda v: (_val(v, "base"), _val(v, "height")),
-    RegularPolygon: lambda v: (2, 2),
-    CircularSector: lambda v: (2, 2),
-    Annulus: lambda v: (2, 2),
-    Cube: lambda v: (1.55, 1.55),
-    Cylinder: lambda v: (2, 1.4),
-    Sphere: lambda v: (2, 2),
-    RectangularPyramid: lambda v: (1.3, 1.4),
-    Cone: lambda v: (2, 1.4),
-    RectangularPrism: lambda v: (1.3, 1.4),
+    RegularPolygon: lambda v: _polygon_extent(v),
+    CircularSector: lambda v: (2 * _val(v, "radio"), 2 * _val(v, "radio")),
+    Annulus: lambda v: (2 * _val(v, "radio"), 2 * _val(v, "radio")),
+    Cube: lambda v: (1.55 * _val(v, "sides"), 1.55 * _val(v, "sides")),
+    Cylinder: lambda v: (2 * _val(v, "radio"), _val(v, "height")),
+    Sphere: lambda v: (2 * _val(v, "radio"), 2 * _val(v, "radio")),
+    RectangularPyramid: lambda v: (_val(v, "base") + 0.6 * _val(v, "width"), _val(v, "height")),
+    Cone: lambda v: (2 * _val(v, "radio"), _val(v, "height")),
+    RectangularPrism: lambda v: (_val(v, "length") + 0.6 * _val(v, "width"), _val(v, "height")),
     Triangle: lambda v: (_val(v, "base"), _val(v, "height")),
     Ellipse: lambda v: (2 * _val(v, "semi_major"), 2 * _val(v, "semi_minor")),
     Rhombus: lambda v: (_val(v, "diag_major"), _val(v, "diag_minor")),
-    Parallelogram: lambda v: (_val(v, "base") + abs(_val(v, "height")), _val(v, "height")),
-    Torus: lambda v: (2, 2),
+    Parallelogram: lambda v: (_val(v, "base") + 2 * abs(_val(v, "height")), _val(v, "height")),
+    Torus: lambda v: (2 * (_val(v, "major_radius") + _val(v, "minor_radius")), 2 * (_val(v, "major_radius") + _val(v, "minor_radius"))),
     Tetrahedron: lambda v: (_val(v, "side"), _val(v, "side") * 1.4),
 }
 
