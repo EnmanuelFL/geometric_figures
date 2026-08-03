@@ -59,8 +59,8 @@ class ResultPanel(ctk.CTkFrame):
         self.canvas_box.pack(fill="x", padx=20, pady=(0, 12))
         self.canvas = tk.Canvas(
             self.canvas_box,
-            width=540,
-            height=190,
+            width=640,
+            height=240,
             bg=t("canvas_bg"),
             highlightthickness=1,
             highlightbackground=t("border"),

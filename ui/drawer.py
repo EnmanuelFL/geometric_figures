@@ -25,6 +25,7 @@ from figures import (
 from ui.theme import LIGHT
 
 MARGIN = 24
+LABEL_SPACE = 40
 
 _PALETTE = LIGHT
 
@@ -343,5 +344,6 @@ def draw(canvas, figure, values, palette=None):
     cw = max(canvas.winfo_width(), 320)
     ch = max(canvas.winfo_height(), 220)
     nw, nh = _SIZES.get(type(figure), lambda v: (1, 1))(values)
-    scale = min((cw - 2 * MARGIN) / nw, (ch - 2 * MARGIN) / nh, 60)
+    scale = min((cw - 2 * MARGIN - 2 * LABEL_SPACE) / nw,
+                (ch - 2 * MARGIN - LABEL_SPACE) / nh, 60)
     draw_func(canvas, cw / 2, ch / 2, max(scale, 1.0), values)
