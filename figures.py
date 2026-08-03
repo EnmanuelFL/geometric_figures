@@ -663,3 +663,67 @@ class Parallelogram(Figures2D):
         self.calculate_area()
         self.calculate_perimeter()
         print(f'The area of the parallelogram is: {self.area:.2f}\nThe side is: {self.side:.2f}\nThe perimeter is: {self.perimeter:.2f}')
+
+
+class Torus(Figures3D):
+    name = "Torus"
+    PARAMETERS = [
+        {"name": "major_radius", "label": "Major radius (R)", "unit": "cm"},
+        {"name": "minor_radius", "label": "Minor radius (r)", "unit": "cm"},
+    ]
+    DESCRIPTION = "3D ring shape (like a donut) made by rotating a circle around an axis."
+    FORMULA = "V = 2·π²·R·r²   |   A = 4·π²·R·r"
+
+    def __init__(self):
+        self.major_radius = None
+        self.minor_radius = None
+
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.major_radius = float(input('enter the major radius: '))
+        self.minor_radius = float(input('enter the minor radius: '))
+
+    def calculate_volume(self):
+        self.volume = 2 * math.pi ** 2 * self.major_radius * self.minor_radius ** 2
+
+    def calculate_surface_area(self):
+        self.surface_area = 4 * math.pi ** 2 * self.major_radius * self.minor_radius
+
+    def validate(self):
+        if self.major_radius <= self.minor_radius:
+            return "Major radius (R) must be greater than minor radius (r)."
+        return None
+
+    def show_result(self):
+        self.calculate_volume()
+        self.calculate_surface_area()
+        print(f'The volume of the torus is: {self.volume:.2f}\nThe surface area is: {self.surface_area:.2f}')
+
+
+class Tetrahedron(Figures3D):
+    name = "Tetrahedron"
+    PARAMETERS = [{"name": "side", "label": "Side", "unit": "cm"}]
+    DESCRIPTION = "Solid with four triangular faces, like a triangular pyramid."
+    FORMULA = "V = a³ / (6·√2)   |   A = √3·a²"
+
+    def __init__(self):
+        self.side = None
+
+    def get_name(self):
+        print(self.name)
+
+    def enter_data(self):
+        self.side = float(input('enter the side: '))
+
+    def calculate_volume(self):
+        self.volume = self.side ** 3 / (6 * math.sqrt(2))
+
+    def calculate_surface_area(self):
+        self.surface_area = math.sqrt(3) * self.side ** 2
+
+    def show_result(self):
+        self.calculate_volume()
+        self.calculate_surface_area()
+        print(f'The volume of the tetrahedron is: {self.volume:.2f}\nThe surface area is: {self.surface_area:.2f}')
